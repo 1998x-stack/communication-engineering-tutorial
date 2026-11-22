@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第1章 通信工程概述</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        /* 离线冗余保障：即使外部样式表未加载也不会横向溢出 */
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html" class="active">第1章 通信工程概述</a></li>
@@ -41,8 +51,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>第1章 通信工程概述</h1>
 
         <p>大家好，我是你们的讲师。今天我们来聊一个看似"接地气"但实际上深刻改变世界的领域——通信工程。</p>
@@ -74,6 +84,48 @@
         <p>任何通信系统，无论多复杂，都可以抽象为下面这个经典模型。这是信息论之父香农（Claude Shannon）在1948年奠定的框架，至今仍然是所有通信系统的理论基石。</p>
 
         <pre><code>信源 → 信源编码 → 信道编码 → 调制 → 信道 → 解调 → 信道解码 → 信源解码 → 信宿</code></pre>
+
+        <figure>
+        <svg role="img" aria-labelledby="fig-sys-title fig-sys-desc" viewBox="0 0 860 210" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-sys-title">通信系统基本模型</title>
+            <desc id="fig-sys-desc">信号从信源出发，依次经过信源编码、信道编码、调制后进入信道，再经解调、信道解码、信源解码到达信宿；信道是唯一不可控的物理环节。</desc>
+            <defs>
+                <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#6366f1"/>
+                </marker>
+            </defs>
+            <g stroke="#6366f1" stroke-width="2">
+                <rect x="20" y="70" width="100" height="70" rx="12" fill="#e0e7ff"/>
+                <rect x="140" y="70" width="100" height="70" rx="12" fill="#e0e7ff"/>
+                <rect x="260" y="70" width="100" height="70" rx="12" fill="#e0e7ff"/>
+                <rect x="380" y="70" width="100" height="70" rx="12" fill="#dbeafe"/>
+                <rect x="500" y="70" width="100" height="70" rx="12" fill="#fee2e2" stroke="#ef4444"/>
+                <rect x="620" y="70" width="100" height="70" rx="12" fill="#e0e7ff"/>
+                <rect x="740" y="70" width="100" height="70" rx="12" fill="#e0e7ff"/>
+            </g>
+            <g font-size="15" text-anchor="middle" fill="#312e81">
+                <text x="70" y="112">信源</text>
+                <text x="190" y="112">信源编码</text>
+                <text x="310" y="112">信道编码</text>
+                <text x="430" y="112">调制</text>
+                <text x="550" y="112" fill="#991b1b">信道</text>
+                <text x="670" y="112">解调/解码</text>
+                <text x="790" y="112">信宿</text>
+            </g>
+            <g stroke="#6366f1" stroke-width="3" marker-end="url(#arw)">
+                <line x1="120" y1="105" x2="138" y2="105"/>
+                <line x1="240" y1="105" x2="258" y2="105"/>
+                <line x1="360" y1="105" x2="378" y2="105"/>
+                <line x1="480" y1="105" x2="498" y2="105"/>
+                <line x1="600" y1="105" x2="618" y2="105"/>
+                <line x1="720" y1="105" x2="738" y2="105"/>
+            </g>
+            <text x="550" y="175" font-size="13" text-anchor="middle" fill="#991b1b">路径损耗 · 多径衰落 · 干扰</text>
+            <text x="70" y="45" font-size="13" text-anchor="middle" fill="#475569">发送端</text>
+            <text x="790" y="45" font-size="13" text-anchor="middle" fill="#475569">接收端</text>
+        </svg>
+        <figcaption><strong>图 1-1</strong> 通信系统基本模型（基于香农 1948 年提出的框架重绘）。红色标注的<strong>信道</strong>是唯一不可控的物理环节，其余环节都是可以设计的数字处理步骤。</figcaption>
+        </figure>
 
         <p>我们来用一个日常场景拆解这个模型：你给朋友发一条微信语音。</p>
 
@@ -279,7 +331,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="02.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
