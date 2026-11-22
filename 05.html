@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第5章 多址技术</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>📡 第5章 多址技术</h1>
 
         <p>大家好，我是你们的讲师。想象一下这样的场景：一个演唱会场馆里，5万个观众同时想用手机发朋友圈、刷短视频、上传合影——但基站只有几个，频谱只有那么一段。基站如何区分这5万个用户？如何保证每个用户的数据不互相干扰？</p>
@@ -123,6 +132,35 @@
         </table>
 
         <p>从表中可以清晰地看到，多址技术的发展是一个在更多维度上"精细化"划分资源的过程。每一代都试图在更小的粒度上、更灵活地分配资源给用户。</p>
+
+        <figure>
+        <svg role="img" aria-labelledby="fig-ma-title fig-ma-desc" viewBox="0 0 860 290" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ma-title">FDMA、TDMA、CDMA、OFDMA 的资源划分方式对比</title>
+            <desc id="fig-ma-desc">四个面板分别展示：FDMA 按频率切成四条互不重叠的子频带；TDMA 把时间轴切成四个时隙；CDMA 让四个用户在同一频率同一时间重叠，靠不同扩频码区分；OFDMA 把时间和频率切成二维格子，每格按需分配给不同用户。</desc>
+            <g fill="#ffffff" stroke="#c7d2fe" stroke-width="2">
+                <rect x="20" y="60" width="190" height="180" rx="14"/><rect x="230" y="60" width="190" height="180" rx="14"/><rect x="440" y="60" width="190" height="180" rx="14"/><rect x="650" y="60" width="190" height="180" rx="14"/>
+            </g>
+            <g font-size="14" font-weight="600" fill="#312e81" text-anchor="middle">
+                <text x="115" y="44">FDMA · 分频</text><text x="325" y="44">TDMA · 分时</text><text x="535" y="44">CDMA · 分码</text><text x="745" y="44">OFDMA · 时频</text>
+            </g>
+            <g>
+                <rect x="30" y="71" width="170" height="40" rx="6" fill="#6366f1" opacity="0.85"/><rect x="30" y="117" width="170" height="40" rx="6" fill="#0ea5e9" opacity="0.85"/><rect x="30" y="163" width="170" height="40" rx="6" fill="#f59e0b" opacity="0.85"/><rect x="30" y="209" width="170" height="40" rx="6" fill="#10b981" opacity="0.85"/>
+            </g>
+            <g transform="translate(210,0)">
+                <rect x="30" y="71" width="38" height="178" rx="6" fill="#6366f1" opacity="0.85"/><rect x="74" y="71" width="38" height="178" rx="6" fill="#0ea5e9" opacity="0.85"/><rect x="118" y="71" width="38" height="178" rx="6" fill="#f59e0b" opacity="0.85"/><rect x="162" y="71" width="38" height="178" rx="6" fill="#10b981" opacity="0.85"/>
+            </g>
+            <g transform="translate(420,0)" opacity="0.55" stroke-width="2">
+                <circle cx="98" cy="130" r="52" fill="#6366f1" stroke="#6366f1"/><circle cx="128" cy="150" r="52" fill="#0ea5e9" stroke="#0ea5e9"/><circle cx="112" cy="182" r="52" fill="#f59e0b" stroke="#f59e0b"/><circle cx="142" cy="200" r="52" fill="#10b981" stroke="#10b981"/>
+            </g>
+            <g transform="translate(630,0)">
+                <rect x="31" y="76" width="20" height="40" rx="4" fill="#6366f1"/><rect x="52" y="76" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="73" y="76" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="94" y="76" width="20" height="40" rx="4" fill="#10b981"/><rect x="115" y="76" width="20" height="40" rx="4" fill="#6366f1"/><rect x="136" y="76" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="157" y="76" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="178" y="76" width="20" height="40" rx="4" fill="#10b981"/>
+                <rect x="31" y="119" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="52" y="119" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="73" y="119" width="20" height="40" rx="4" fill="#10b981"/><rect x="94" y="119" width="20" height="40" rx="4" fill="#6366f1"/><rect x="115" y="119" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="136" y="119" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="157" y="119" width="20" height="40" rx="4" fill="#10b981"/><rect x="178" y="119" width="20" height="40" rx="4" fill="#6366f1"/>
+                <rect x="31" y="162" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="52" y="162" width="20" height="40" rx="4" fill="#10b981"/><rect x="73" y="162" width="20" height="40" rx="4" fill="#6366f1"/><rect x="94" y="162" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="115" y="162" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="136" y="162" width="20" height="40" rx="4" fill="#10b981"/><rect x="157" y="162" width="20" height="40" rx="4" fill="#6366f1"/><rect x="178" y="162" width="20" height="40" rx="4" fill="#0ea5e9"/>
+                <rect x="31" y="205" width="20" height="40" rx="4" fill="#10b981"/><rect x="52" y="205" width="20" height="40" rx="4" fill="#6366f1"/><rect x="73" y="205" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="94" y="205" width="20" height="40" rx="4" fill="#f59e0b"/><rect x="115" y="205" width="20" height="40" rx="4" fill="#10b981"/><rect x="136" y="205" width="20" height="40" rx="4" fill="#6366f1"/><rect x="157" y="205" width="20" height="40" rx="4" fill="#0ea5e9"/><rect x="178" y="205" width="20" height="40" rx="4" fill="#f59e0b"/>
+            </g>
+        </svg>
+        <figcaption><strong>图 5-1</strong> 四种多址方式如何划分同一块资源（每种颜色代表一个用户，为教学示意）。FDMA 划分频率、TDMA 划分时间、CDMA 靠正交码在同一时频上区分用户、OFDMA 把时频切成二维格子按需分配——维度越多，调度越灵活。</figcaption>
+        </figure>
 
         <h2>5.3 CDMA：用"语言"区分用户</h2>
 
@@ -234,7 +272,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="06.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
