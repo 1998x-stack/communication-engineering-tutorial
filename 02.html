@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第2章 信号与频谱基础</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>📡 第2章 信号与频谱基础</h1>
 
         <p>大家好，我是你们的讲师。先问一个"灵魂拷问"：你家WiFi路由器上是不是有两个频段——2.4GHz和5GHz？你有没有发现，2.4GHz穿墙能力强，但速度慢；5GHz速度快，但隔一堵墙信号就掉了两格？这是为什么？要回答这个问题，我们需要先搞明白一个核心概念——<strong>频谱</strong>。</p>
@@ -69,17 +78,59 @@
 
         <p><strong>时域</strong>告诉我们信号随时间如何变化，<strong>频域</strong>告诉我们信号由哪些频率分量组成。同一个信号，从两个不同的角度观察，看到的是完全不同的信息。就像一枚硬币的两面——都是真实的，但只看一面永远无法理解全貌。</p>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-tf-title fig-tf-desc" viewBox="0 0 860 290" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-tf-title">复合信号的时域波形与频域幅度谱</title>
+            <desc id="fig-tf-desc">左图是 50 Hz 与 120 Hz 两个正弦叠加后的时域波形，看起来相当不规则；右图用 FFT 得到的幅度谱上只出现 50 Hz 和 120 Hz 两个窄尖峰。</desc>
+            <text x="230" y="34" font-size="15" font-weight="600" fill="#312e81" text-anchor="middle">时域 x(t)</text>
+            <text x="670" y="34" font-size="15" font-weight="600" fill="#312e81" text-anchor="middle">频域 |X(f)|</text>
+            <g stroke="#94a3b8" stroke-width="2">
+                <line x1="60" y1="230" x2="400" y2="230"/>
+                <line x1="60" y1="70" x2="60" y2="230"/>
+                <line x1="540" y1="230" x2="810" y2="230"/>
+                <line x1="540" y1="70" x2="540" y2="230"/>
+            </g>
+            <polyline fill="none" stroke="#6366f1" stroke-width="2.5" points="60.0,160.0 64.2,127.2 68.5,109.2 72.8,112.9 77.0,134.2 81.2,160.2 85.5,176.2 89.8,174.1 94.0,156.4 98.2,134.9 102.5,124.0 106.8,132.5 111.0,159.0 115.2,191.8 119.5,215.3 123.8,218.1 128.0,199.3 132.2,168.5 136.5,141.0 140.8,129.6 145.0,137.7 149.2,157.9 153.5,176.2 157.8,179.9 162.0,164.9 166.2,137.9 170.5,113.0 174.8,104.3 179.0,117.8 183.2,148.4 187.5,182.3 191.8,204.1 196.0,205.0 200.2,187.3 204.5,162.8 208.8,146.1 213.0,146.7 217.2,163.9 221.5,186.9 225.8,201.1 230.0,196.0 234.2,171.4 238.5,137.6 242.8,110.1 247.0,101.8 251.2,115.6 255.5,143.7 259.8,171.3 264.0,184.8 268.2,179.1 272.5,160.0 276.8,140.9 281.0,135.2 285.2,148.7 289.5,176.3 293.8,204.4 298.0,218.2 302.2,209.9 306.5,182.4 310.8,148.6 315.0,124.0 319.2,118.9 323.5,133.1 327.8,156.1 332.0,173.3 336.2,173.9 340.5,157.2 344.8,132.7 349.0,115.0 353.2,115.9 357.5,137.7 361.8,171.6 366.0,202.2 370.2,215.7 374.5,207.0 378.8,182.1 383.0,155.1 387.2,140.1 391.5,143.8 395.8,162.1 400.0,182.3"/>
+            <g fill="#6366f1">
+                <rect x="624" y="180" width="26" height="50" rx="4"/>
+                <rect x="742" y="144" width="26" height="86" rx="4"/>
+            </g>
+            <g fill="#475569" font-size="13" text-anchor="middle">
+                <text x="230" y="254">t（约 4 个 50 Hz 周期）</text>
+                <text x="637" y="254">50 Hz</text>
+                <text x="755" y="254">120 Hz</text>
+                <text x="580" y="270" font-size="12">幅度比 ≈ 0.7 : 1.2</text>
+            </g>
+        </svg>
+        <figcaption><strong>图 2-1</strong> 同一个复合信号的两个视角：时域波形杂乱无章，频域幅度谱上却是两个干净的尖峰。图中波形取自第 2.3 节 Python 示例的 50 Hz + 120 Hz 叠加信号；坐标轴为教学示意，未按真实物理标度标注。</figcaption>
+        </figure>
+
         <p>在通信工程中，绝大多数设计都是在频域完成的：信道带宽决定了能传多快，子载波间隔决定了抗多径能力，频谱分配决定了谁能用哪段频率——这些都是频域的概念。但你最终在示波器上看到的、在天线上辐射出去的，都是时域信号。通信工程师必须具备在时域和频域之间自由切换的能力。</p>
 
         <h2>2.3 傅里叶分析：通信工程的"数学望远镜"</h2>
 
         <p>傅里叶变换是连接时域和频域的桥梁。它的数学表达式如下：</p>
 
-        <pre><code>时域 → 频域：
-X(f) = ∫ x(t)·e^(-j2πft) dt   (从 -∞ 到 +∞)
-
-频域 → 时域（逆变换）：
-x(t) = ∫ X(f)·e^(j2πft) df   (从 -∞ 到 +∞)</code></pre>
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="傅里叶变换对，可横向滚动">
+                <math display="block" aria-label="傅里叶正变换：X(f) 等于 x(t) 乘 e 的负 j2πft 次方对 t 从负无穷到正无穷的积分">
+                    <mi>X</mi><mo>(</mo><mi>f</mi><mo>)</mo><mo>=</mo>
+                    <munderover><mo>∫</mo><mrow><mo>−</mo><mi>∞</mi></mrow><mrow><mo>+</mo><mi>∞</mi></mrow></munderover>
+                    <mi>x</mi><mo>(</mo><mi>t</mi><mo>)</mo>
+                    <msup><mi>e</mi><mrow><mo>−</mo><mi>j</mi><mn>2</mn><mi>π</mi><mi>f</mi><mi>t</mi></mrow></msup>
+                    <mi mathvariant="normal">d</mi><mi>t</mi>
+                </math>
+            </div>
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="逆傅里叶变换，可横向滚动" style="margin-top:8px;">
+                <math display="block" aria-label="逆变换：x(t) 等于 X(f) 乘 e 的 j2πft 次方对 f 从负无穷到正无穷的积分">
+                    <mi>x</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo>
+                    <munderover><mo>∫</mo><mrow><mo>−</mo><mi>∞</mi></mrow><mrow><mo>+</mo><mi>∞</mi></mrow></munderover>
+                    <mi>X</mi><mo>(</mo><mi>f</mi><mo>)</mo>
+                    <msup><mi>e</mi><mrow><mi>j</mi><mn>2</mn><mi>π</mi><mi>f</mi><mi>t</mi></mrow></msup>
+                    <mi mathvariant="normal">d</mi><mi>f</mi>
+                </math>
+            </div>
+        </div>
 
         <p>先别被积分符号吓到。直观理解是：傅里叶变换把一段信号"拆开"，看它里面包含了哪些频率分量，每个分量的幅度和相位是多少。就像用三棱镜把白光分解成彩虹——白光（时域信号）经过三棱镜（傅里叶变换）就变成了七色光谱（频谱）。</p>
 
@@ -188,7 +239,13 @@ plt.show()
 
         <p>1948年，克劳德·香农发表了一篇划时代的论文——《通信的数学理论》。其中给出了一个简单到令人震惊的公式，定义了在噪声信道中无差错传输的最大数据速率：</p>
 
-        <pre><code>C = B · log₂(1 + S/N)</code></pre>
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="香农信道容量公式，可横向滚动">
+                <math display="block" aria-label="C 等于 B 乘以 1 加信噪比 S 比 N 的以 2 为底的对数">
+                    <mi>C</mi><mo>=</mo><mi>B</mi><mo>⋅</mo><msub><mi>log</mi><mn>2</mn></msub><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mi>S</mi><mi>N</mi></mfrac><mo>)</mo>
+                </math>
+            </div>
+        </div>
 
         <p>其中，C是信道容量（单位bit/s），B是信道带宽（单位Hz），S/N是信噪比（Signal-to-Noise Ratio，无量纲）。这个公式告诉我们三件事：</p>
 
@@ -286,7 +343,7 @@ plt.show()
             <a href="index.html">📖 返回目录</a>
             <a href="03.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
