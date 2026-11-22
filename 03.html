@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第3章 模拟调制与数字调制</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>📡 第3章 模拟调制与数字调制</h1>
 
         <p>大家好，我是你们的讲师。上一章我们谈了信号与频谱——你知道了时域和频域是两个不同的观察维度，也明白了频谱资源就像通信世界的"土地"一样珍贵。但有一个关键问题还没解决：你的声音频率大约是300Hz到3400Hz，这个频率的信号在空中传播距离非常有限——喊一嗓子也就传几十米。但如果你把声音"搬"到2.6GHz的载波上，它就能传几公里甚至更远。</p>
@@ -166,31 +175,57 @@
 
         <p>星座图是通信工程师最常用的调试工具之一。它把每个符号的I/Q两路分量画在二维平面上——横轴是同相分量（I路），纵轴是正交分量（Q路）。</p>
 
-        <p>下面是一个QPSK星座图的简化示意：</p>
+        <p>下面用一张图对比 QPSK 与 16QAM 的星座结构，以及它们对噪声敏感度的区别：</p>
 
-        <pre><code>QPSK星座图（Gray编码映射）：
-
-    Q (正交分量)
-        ↑
-  01 ·  |  · 00    ← 每个点代表2个比特
-   (低) |  (高)
-   ─────┼─────→ I (同相分量)
-  11 ·  |  · 10
-   (低) |  (高)
-
-每个星座点对应一种相位状态：
-  00 → 45°  (I高, Q高)
-  01 → 135° (I低, Q高)
-  10 → -45° (I高, Q低)
-  11 → -135°(I低, Q低)
-
-相邻星座点之间仅相差1个比特（Gray编码特性）。</code></pre>
+        <figure>
+        <svg role="img" aria-labelledby="fig-cx-title fig-cx-desc" viewBox="0 0 860 330" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-cx-title">QPSK 与 16QAM 星座图对比</title>
+            <desc id="fig-cx-desc">左图 QPSK 在 I/Q 平面上只有 4 个星座点，相邻点距离大；右图 16QAM 有 4×4 共 16 个星座点，点间距离缩小一半，因此相同噪声下更容易判错。</desc>
+            <text x="240" y="34" font-size="15" font-weight="600" fill="#312e81" text-anchor="middle">QPSK · 2 bit/符号</text>
+            <text x="640" y="34" font-size="15" font-weight="600" fill="#312e81" text-anchor="middle">16QAM · 4 bit/符号</text>
+            <g stroke="#94a3b8" stroke-width="2">
+                <line x1="120" y1="180" x2="360" y2="180"/>
+                <line x1="240" y1="80" x2="240" y2="280"/>
+                <line x1="520" y1="180" x2="760" y2="180"/>
+                <line x1="640" y1="80" x2="640" y2="280"/>
+            </g>
+            <g fill="#6366f1">
+                <circle cx="295" cy="125" r="9"/><circle cx="185" cy="125" r="9"/>
+                <circle cx="185" cy="235" r="9"/><circle cx="295" cy="235" r="9"/>
+            </g>
+            <g fill="#4338ca" font-size="13">
+                <text x="309" y="121">00</text><text x="154" y="121">01</text>
+                <text x="154" y="245">11</text><text x="309" y="245">10</text>
+            </g>
+            <g fill="#6366f1">
+                <circle cx="595" cy="135" r="8"/><circle cx="625" cy="135" r="8"/><circle cx="655" cy="135" r="8"/><circle cx="685" cy="135" r="8"/>
+                <circle cx="595" cy="165" r="8"/><circle cx="625" cy="165" r="8"/><circle cx="655" cy="165" r="8"/><circle cx="685" cy="165" r="8"/>
+                <circle cx="595" cy="195" r="8"/><circle cx="625" cy="195" r="8"/><circle cx="655" cy="195" r="8"/><circle cx="685" cy="195" r="8"/>
+                <circle cx="595" cy="225" r="8"/><circle cx="625" cy="225" r="8"/><circle cx="655" cy="225" r="8"/><circle cx="685" cy="225" r="8"/>
+            </g>
+            <g fill="#475569" font-size="13" text-anchor="middle">
+                <text x="300" y="305">I（同相）</text>
+                <text x="700" y="305">I（同相）</text>
+                <text x="102" y="185">Q</text>
+                <text x="502" y="185">Q</text>
+            </g>
+        </svg>
+        <figcaption><strong>图 3-1</strong> QPSK 与 16QAM 星座图对比（Gray 编码映射示意）。星座点越多，每符号携带的比特越多，但相邻点间距越小，对噪声和 EVM 的要求越苛刻——这正是高阶调制“提速但不白送”的代价。</figcaption>
+        </figure>
 
         <p>实际的星座图看起来是一个"十字靶心"——理想情况下所有星座点都在精确位置，但由于信道噪声、器件非线性等因素，实际接收到的点会围绕理想位置扩散。扩散程度用<strong>EVM</strong>（误差矢量幅度，Error Vector Magnitude）来衡量：</p>
 
-        <pre><code>EVM = √(平均误差矢量功率 / 理想符号功率) × 100%
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="EVM 定义式，可横向滚动">
+                <math display="block" aria-label="EVM 等于平均误差矢量功率除以理想符号功率的平方根，再乘以 100%">
+                    <mi>EVM</mi><mo>=</mo>
+                    <msqrt><mfrac><mtext>平均误差矢量功率</mtext><mtext>理想符号功率</mtext></mfrac></msqrt>
+                    <mo>×</mo><mn>100</mn><mo>%</mo>
+                </math>
+            </div>
+        </div>
 
-3GPP 5G NR对EVM的要求：
+        <pre><code>3GPP 5G NR对EVM的要求：
   - QPSK:  EVM ≤ 17.5%
   - 16QAM: EVM ≤ 12.5%
   - 64QAM: EVM ≤ 8%
@@ -243,7 +278,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="04.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
