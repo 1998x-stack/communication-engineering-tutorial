@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第6章 信道编码与信息论基础</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>📡 第6章 信道编码与信息论基础</h1>
 
         <p>大家好，我是你们的讲师。想象一下：你收到了一个包含1000个0/1比特的数据包，但传输过程中受到了干扰——有5个比特被"翻转"了。如果这5个比特恰好是关键的控制信令，你的手机可能就会掉线。如何保证接收端能检测到甚至自动纠正这些错误？</p>
@@ -128,6 +137,30 @@
         </table>
 
         <p>从表中可以看到一个清晰的趋势：编码方案一代比一代更接近香农极限。Turbo码在3G/4G时代"统治"了20年，LDPC码在5G数据信道中接过了接力棒，而Polar码以"首个理论上可达到香农极限"的编码方案成为了5G控制信道的标准。</p>
+
+        <figure>
+        <svg role="img" aria-labelledby="fig-ber-title fig-ber-desc" viewBox="0 0 860 375" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ber-title">未编码 BPSK 与理想编码方案的误码率-信噪比曲线示意图</title>
+            <desc id="fig-ber-desc">横轴为每比特信噪比 Eb/N0（dB），纵轴为误码率 BER（对数刻度）。未编码 BPSK 曲线下降缓慢；理想编码方案的曲线向左平移，在靠近码率 1/2 香农极限（约 0.19 dB）处出现陡峭的瀑布式下降。</desc>
+            <path d="M90 60 H800 M90 103.3 H800 M90 146.7 H800 M90 190 H800 M90 233.3 H800 M90 276.7 H800 M90 320 H800 M191.4 60 V320 M394.3 60 V320 M597.1 60 V320 M800 60 V320" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+            <line x1="210.7" y1="60" x2="210.7" y2="320" stroke="#ef4444" stroke-width="2" stroke-dasharray="7 5"/>
+            <polyline fill="none" stroke="#6366f1" stroke-width="2.5" points="90.0,102.6 100.1,103.1 110.3,103.6 120.4,104.1 130.6,104.6 140.7,105.1 150.9,105.6 161.0,106.2 171.1,106.7 181.3,107.3 191.4,107.9 201.6,108.4 211.7,109.0 221.9,109.6 232.0,110.2 242.1,110.9 252.3,111.5 262.4,112.1 272.6,112.8 282.7,113.5 292.9,114.2 303.0,114.8 313.1,115.6 323.3,116.3 333.4,117.0 343.6,117.8 353.7,118.6 363.9,119.3 374.0,120.1 384.1,121.0 394.3,121.8 404.4,122.6 414.6,123.5 424.7,124.4 434.9,125.3 445.0,126.2 455.1,127.1 465.3,128.1 475.4,129.1 485.6,130.1 495.7,131.1 505.9,132.1 516.0,133.2 526.1,134.3 536.3,135.4 546.4,136.5 556.6,137.6 566.7,138.8 576.9,140.0 587.0,141.2 597.1,142.5 607.3,143.7 617.4,145.0 627.6,146.4 637.7,147.7 647.9,149.1 658.0,150.5 668.1,151.9 678.3,153.4 688.4,154.9 698.6,156.4 708.7,158.0 718.9,159.6 729.0,161.2 739.1,162.9 749.3,164.6 759.4,166.3 769.6,168.1 779.7,169.9 789.9,171.7 800.0,173.6"/>
+            <polyline fill="none" stroke="#10b981" stroke-width="2.5" points="90.0,73.0 100.1,73.0 110.3,73.0 120.4,73.0 130.6,73.0 140.7,73.0 150.9,73.1 161.0,73.1 171.1,73.1 181.3,73.1 191.4,73.1 201.6,73.2 211.7,73.3 221.9,73.6 232.0,74.0 242.1,74.7 252.3,75.9 262.4,78.0 272.6,81.3 282.7,86.1 292.9,92.6 303.0,100.6 313.1,109.8 323.3,119.8 333.4,130.4 343.6,141.3 353.7,152.4 363.9,163.5 374.0,174.8 384.1,186.0 394.3,197.3 404.4,208.6 414.6,219.8 424.7,231.1 434.9,242.4 445.0,253.7 455.1,265.0 465.3,276.3 475.4,287.6 485.6,298.9 495.7,310.2 505.9,320.0 516.0,320.0"/>
+            <g font-size="12" fill="#475569" text-anchor="end">
+                <text x="82" y="64">10⁰</text><text x="82" y="107">10⁻¹</text><text x="82" y="151">10⁻²</text><text x="82" y="194">10⁻³</text><text x="82" y="237">10⁻⁴</text><text x="82" y="281">10⁻⁵</text><text x="82" y="324">10⁻⁶</text>
+            </g>
+            <g font-size="12" fill="#475569" text-anchor="middle">
+                <text x="191" y="338">0</text><text x="394" y="338">2</text><text x="597" y="338">4</text><text x="800" y="338">6</text>
+                <text x="445" y="358">每比特信噪比 Eb/N0（dB）→</text>
+            </g>
+            <text x="216" y="52" font-size="12" fill="#b91c1c">香农极限 ≈ 0.19 dB（码率 1/2）</text>
+            <g font-size="12">
+                <line x1="530" y1="30" x2="560" y2="30" stroke="#6366f1" stroke-width="2.5"/><text x="566" y="34" fill="#312e81">未编码 BPSK</text>
+                <line x1="670" y1="30" x2="700" y2="30" stroke="#10b981" stroke-width="2.5"/><text x="706" y="34" fill="#065f46">理想编码</text>
+            </g>
+        </svg>
+        <figcaption><strong>图 6-1</strong> 误码率随信噪比变化的概念图（教学示意，非实测曲线）：未编码 BPSK 的曲线下降缓慢，而先进编码方案的曲线向左“瀑布式”逼近码率 1/2 二进制输入 AWGN 信道的香农极限（约 0.19 dB）。Turbo 码距极限约 0.7 dB、LDPC 码可达约 0.1 dB 量级的描述见第 6.3 节表格。</figcaption>
+        </figure>
 
         <h2>6.4 LDPC码：迭代的力量</h2>
 
@@ -234,7 +267,7 @@
             <a href="index.html">📖 返回目录</a>
             <a href="07.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
