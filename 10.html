@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第10章 OFDM与5G帧结构</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>第10章 OFDM与5G帧结构</h1>
 
         <p>大家好，我是你们的讲师。如果只能用一个技术来定义4G和5G的物理层，那毫无疑问是OFDM（Orthogonal Frequency Division Multiplexing，正交频分复用）。OFDM不是5G才有的——4G LTE就用它，WiFi 6/7也用，数字广播DVB-T也用。但5G把OFDM推到了全新的高度：灵活的子载波间隔、动态的时隙配置、带宽部分（BWP）等创新，让OFDM从一个"调制技术"演变成了一个"系统设计框架"。</p>
@@ -103,6 +112,30 @@ void ofdm_modulate(complex double *mod_symbols,   // QAM调制后的频域符号
         </ul>
 
         <p>5G NR支持两种CP配置：Normal CP（每个时隙14个符号，前2个符号的CP略长）和Extended CP（每个时隙12个符号，CP长度固定为512 Ts，仅用于60 kHz SCS）。</p>
+
+        <figure>
+        <svg role="img" aria-labelledby="fig-cp-title fig-cp-desc" viewBox="0 0 860 260" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-cp-title">循环前缀 CP 的构造方式</title>
+            <desc id="fig-cp-desc">原始 OFDM 符号尾部的一段采样被复制到符号开头组成循环前缀，使符号在 FFT 窗口内看上去是循环的，从而吸收多径时延、保持子载波正交。</desc>
+            <defs>
+                <marker id="cp-arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#f59e0b"/>
+                </marker>
+            </defs>
+            <text x="120" y="50" font-size="14" font-weight="600" fill="#312e81">原始 OFDM 符号（尾部一段将被复制）</text>
+            <rect x="120" y="70" width="560" height="56" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <rect x="540" y="70" width="140" height="56" rx="8" fill="#f59e0b" opacity="0.35" stroke="#f59e0b" stroke-width="2"/>
+            <text x="610" y="104" font-size="13" text-anchor="middle" fill="#92400e">尾部</text>
+            <text x="330" y="104" font-size="13" text-anchor="middle" fill="#312e81">s0 s1 s2 … sN</text>
+            <text x="120" y="160" font-size="14" font-weight="600" fill="#312e81">实际发送（循环前缀 CP + 符号）</text>
+            <rect x="120" y="170" width="140" height="56" rx="8" fill="#f59e0b" opacity="0.35" stroke="#f59e0b" stroke-width="2"/>
+            <rect x="260" y="170" width="560" height="56" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+            <text x="190" y="204" font-size="13" text-anchor="middle" fill="#92400e">CP</text>
+            <text x="540" y="204" font-size="13" text-anchor="middle" fill="#312e81">s0 s1 s2 … sN</text>
+            <path d="M610 128 C610 150 190 148 190 168" stroke="#f59e0b" stroke-width="2.5" fill="none" marker-end="url(#cp-arw)"/>
+        </svg>
+        <figcaption><strong>图 10-1</strong> 循环前缀的构造：把符号尾部一段采样复制到开头。只要多径时延不超过 CP 长度，所有多径分量就落在 CP 内，FFT 窗口就可以正确对齐；代价是 CP 本身不携带新数据，会占用一部分频谱效率（图中比例为教学示意，实际 CP 开销因配置而异）。</figcaption>
+        </figure>
 
         <h2>10.3 5G NR Numerology</h2>
 
@@ -181,6 +214,23 @@ void ofdm_modulate(complex double *mod_symbols,   // QAM调制后的频域符号
 
         <p>以主流的中频5G（SCS=30 kHz，μ=1）为例：每10ms无线帧包含20个时隙，每个时隙长0.5ms，每个时隙14个OFDM符号，每个符号约33.33 μs。整个时间结构非常清晰。</p>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-grid-title fig-grid-desc" viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-grid-title">5G NR 时频资源网格与一个时隙的 14 个 OFDM 符号</title>
+            <desc id="fig-grid-desc">横轴是一个时隙内的 14 个 OFDM 符号，纵轴是 12 个子载波（即 1 个资源块 RB）；高亮区域表示一次调度分配给某个用户的时频资源，跨越多个子载波和多个符号。</desc>
+            <rect x="110" y="60" width="680" height="220" fill="#f8faff" stroke="#c7d2fe"/>
+            <path d="M110 60.0 H790 M110 78.3 H790 M110 96.7 H790 M110 115.0 H790 M110 133.3 H790 M110 151.7 H790 M110 170.0 H790 M110 188.3 H790 M110 206.7 H790 M110 225.0 H790 M110 243.3 H790 M110 261.7 H790 M110 280.0 H790" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+            <path d="M110 60 V280 M158.6 60 V280 M207.1 60 V280 M255.7 60 V280 M304.3 60 V280 M352.9 60 V280 M401.4 60 V280 M450 60 V280 M498.6 60 V280 M547.1 60 V280 M595.7 60 V280 M644.3 60 V280 M692.9 60 V280 M741.4 60 V280 M790 60 V280" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+            <rect x="255.7" y="96.7" width="291.4" height="73.3" fill="#6366f1" opacity="0.25" stroke="#4338ca" stroke-width="2"/>
+            <rect x="498.6" y="188.3" width="97.1" height="36.7" fill="#10b981" opacity="0.25" stroke="#047857" stroke-width="2"/>
+            <text x="401" y="140" font-size="13" text-anchor="middle" fill="#312e81">用户 A 的数据（多子载波 × 多符号）</text>
+            <text x="547" y="210" font-size="12" text-anchor="middle" fill="#065f46">用户 B</text>
+            <text x="790" y="298" font-size="13" text-anchor="end" fill="#475569">OFDM 符号（1 时隙 = 14 个）→</text>
+            <text x="95" y="176" font-size="13" text-anchor="middle" fill="#475569" transform="rotate(-90 95 176)">子载波（1 RB = 12 个）→</text>
+        </svg>
+        <figcaption><strong>图 10-2</strong> 5G NR 的时频资源网格（教学示意）：横轴是一个时隙内的 14 个 OFDM 符号，纵轴是 12 个子载波（即 1 个资源块 RB）。调度器把空闲的时频格子按需分配给不同用户，这就是 OFDMA 在帧结构上的具体形态。</figcaption>
+        </figure>
+
         <h2>10.5 灵活时隙格式：D/U/F动态配置</h2>
 
         <p>4G LTE的帧结构是固定的——每个子帧要么全下行，要么全上行。但5G的流量是动态的：白天浏览网页（下行多），晚上直播上传（上行多）。如果帧结构固定，就无法适应这种流量变化。</p>
@@ -230,7 +280,7 @@ void ofdm_modulate(complex double *mod_symbols,   // QAM调制后的频域符号
             <a href="index.html">📖 返回目录</a>
             <a href="11.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
