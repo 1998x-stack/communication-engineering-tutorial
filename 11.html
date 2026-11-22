@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第11章 Massive MIMO与波束赋形</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>第11章 Massive MIMO与波束赋形</h1>
 
         <p>大家好，我是你们的讲师。如果说5G有一个让人"一眼惊艳"的技术，那一定是Massive MIMO。当你站在一个有5G宏站的楼顶，看到那个方方正正的AAU（Active Antenna Unit）——里面可能集成了64个天线振子，每个振子后面都有独立的射频通道。这个"天线阵"不是用来"收得更好"这么简单，它在做的事情远比这神奇：通过精确控制每个天线的发射信号的相位和幅度，基站可以把无线信号像手电筒的聚光一样"照向"某个特定用户，而对其他用户几乎没有干扰。</p>
@@ -118,6 +127,35 @@
         </table>
 
         <p>中国移动和中兴/华为部署的64T64R AAU采用纯数字波束赋形架构——64个射频通道、64路ADC/DAC、64路完整的基带处理链路。这使得基站可以在同一个时频资源上同时发送多个不同方向的波束，真正实现MU-MIMO的全能力。</p>
+
+        <figure>
+        <svg role="img" aria-labelledby="fig-bf-title fig-bf-desc" viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-bf-title">数字波束赋形形成的多个空间波束</title>
+            <desc id="fig-bf-desc">基站天线阵列通过数字加权同时形成多个窄波束，分别指向不同方向的用户 A、B、C，在同一时频资源上实现多用户空间复用。</desc>
+            <line x1="120" y1="30" x2="120" y2="310" stroke="#94a3b8" stroke-width="2"/>
+            <g fill="#4338ca">
+                <rect x="112" y="40" width="16" height="18" rx="3"/><rect x="112" y="78" width="16" height="18" rx="3"/><rect x="112" y="116" width="16" height="18" rx="3"/><rect x="112" y="154" width="16" height="18" rx="3"/><rect x="112" y="192" width="16" height="18" rx="3"/><rect x="112" y="230" width="16" height="18" rx="3"/><rect x="112" y="268" width="16" height="18" rx="3"/>
+            </g>
+            <text x="130" y="22" font-size="14" font-weight="600" fill="#312e81">基站 64T64R 天线阵列</text>
+            <g stroke="#6366f1" stroke-width="2">
+                <path d="M130 178 L795 45 L820 95 Z" fill="#6366f1" opacity="0.22"/>
+                <path d="M130 178 L838 140 L838 212 Z" fill="#0ea5e9" opacity="0.18"/>
+                <path d="M130 178 L795 300 L820 250 Z" fill="#10b981" opacity="0.18"/>
+            </g>
+            <g>
+                <circle cx="812" cy="70" r="16" fill="#fff" stroke="#4338ca" stroke-width="2"/>
+                <circle cx="820" cy="176" r="16" fill="#fff" stroke="#0ea5e9" stroke-width="2"/>
+                <circle cx="812" cy="276" r="16" fill="#fff" stroke="#047857" stroke-width="2"/>
+            </g>
+            <g font-size="13" text-anchor="middle" font-weight="600">
+                <text x="812" y="75" fill="#4338ca">A</text>
+                <text x="820" y="181" fill="#0ea5e9">B</text>
+                <text x="812" y="281" fill="#047857">C</text>
+            </g>
+            <text x="700" y="322" font-size="13" fill="#475569">同一时频资源同时服务 3 个用户</text>
+        </svg>
+        <figcaption><strong>图 11-1</strong> 数字波束赋形的直观图景（教学示意）：阵列的每一个振子都有独立射频通道，通过数字加权同时形成指向用户 A、B、C 的三个窄波束。用户间靠空间方向隔离，因此可以在同一时频资源上并行传输——这就是 MU-MIMO 与 Massive MIMO 容量提升的物理来源。</figcaption>
+        </figure>
 
         <h2>11.4 波束管理</h2>
 
@@ -206,7 +244,7 @@ void zf_precoding(complex double **H,      // 信道矩阵 [N_UE * N_ant]
             <a href="index.html">📖 返回目录</a>
             <a href="12.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
