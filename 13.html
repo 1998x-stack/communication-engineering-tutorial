@@ -125,6 +125,38 @@
 
         <h2>13.3 HARQ机制</h2>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch13-title fig-ch13-desc" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch13-title">HARQ 增量冗余与软合并流程</title>
+            <desc id="fig-ch13-desc">首次传输发送冗余版本 RV0，接收端解码失败并缓存软比特，回送 NACK；发送端按同一 HARQ 进程重传另一冗余版本 RV2；接收端将 RV0 与 RV2 的软比特合并后再解码，从而获得编码增益并成功。整个过程不重复发送相同数据，而是逐步补充冗余。</desc>
+            <defs>
+                <marker id="fig-ch13-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#64748b"/></marker>
+                <marker id="fig-ch13-nack" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#dc2626"/></marker>
+            </defs>
+            <rect x="70" y="50" width="160" height="52" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="150" y="81" font-size="13" fill="#312e81" text-anchor="middle">RV0 · 首次传输</text>
+            <rect x="70" y="180" width="160" height="52" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="150" y="211" font-size="13" fill="#312e81" text-anchor="middle">RV2 · 重传</text>
+            <rect x="430" y="50" width="160" height="52" rx="9" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="510" y="81" font-size="13" fill="#991b1b" text-anchor="middle">解码失败 → 缓存软比特</text>
+            <rect x="430" y="180" width="190" height="52" rx="9" fill="#fef9c3" stroke="#facc15" stroke-width="1.5"/>
+            <text x="525" y="211" font-size="13" fill="#854d0e" text-anchor="middle">软缓冲：RV0 ⊕ RV2 合并</text>
+            <rect x="680" y="180" width="140" height="52" rx="9" fill="#dcfce7" stroke="#10b981" stroke-width="1.5"/>
+            <text x="750" y="211" font-size="13" fill="#065f46" text-anchor="middle">解码成功</text>
+            <line x1="230" y1="76" x2="430" y2="76" stroke="#64748b" stroke-width="2.5" marker-end="url(#fig-ch13-ar)"/>
+            <text x="330" y="68" font-size="11" fill="#475569" text-anchor="middle">第一次传输</text>
+            <path d="M510 102 L510 140 L150 140 L150 112" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fig-ch13-nack)"/>
+            <text x="345" y="134" font-size="12" fill="#b91c1c" text-anchor="middle">NACK 回传</text>
+            <line x1="230" y1="206" x2="430" y2="206" stroke="#64748b" stroke-width="2.5" marker-end="url(#fig-ch13-ar)"/>
+            <text x="330" y="198" font-size="11" fill="#475569" text-anchor="middle">重传输（异步）</text>
+            <line x1="620" y1="206" x2="680" y2="206" stroke="#64748b" stroke-width="2.5" marker-end="url(#fig-ch13-ar)"/>
+            <text x="150" y="258" font-size="11" fill="#475569" text-anchor="middle">发送端</text>
+            <text x="510" y="258" font-size="11" fill="#475569" text-anchor="middle">接收端</text>
+            <text x="430" y="288" font-size="12" fill="#312e81" text-anchor="middle">每次重传不同的冗余版本，合并后获得编码增益（增量冗余 IR）</text>
+        </svg>
+        <figcaption><strong>图 13-1</strong> HARQ 增量冗余流程（为教学示意）：首次发送 RV0 解码失败后，接收端并不丢弃软比特，而是回送 NACK 并缓存；发送端重传另一冗余版本 RV2；接收端将 RV0 与 RV2 的软比特合并后重新解码，从而获得编码增益。RV 序号与重传时序均为简化表示，实际由 DCI 与 HARQ 进程调度决定。</figcaption>
+        </figure>
+
         <p>HARQ（Hybrid Automatic Repeat Request）是物理层和MAC层之间的协作机制，处理数据包传输失败时的重传。5G NR采用了异步HARQ，每个HARQ进程独立管理重传。</p>
 
         <p>HARQ的两个关键技术：</p>

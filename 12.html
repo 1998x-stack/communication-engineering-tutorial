@@ -140,6 +140,43 @@
 
         <h2>12.4 资源网格</h2>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch12-title fig-ch12-desc" viewBox="0 0 860 400" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch12-title">一个时隙内的下行资源网格与信号位置</title>
+            <desc id="fig-ch12-desc">横轴为一个时隙的十四个 OFDM 符号，纵轴为资源块 RB。前两个符号是 PDCCH/CORESET 控制区，后续符号留给 PDSCH；DMRS 以两个符号列穿插在数据中用于信道估计；用户 A 与用户 B 的 PDSCH 占用不同 RB 区间；一个 CSI-RS 资源单元只占单符号单子载波。每个小格是一个 RE。</desc>
+            <g fill-opacity="0.75">
+                <rect x="90" y="70" width="96" height="168" fill="#f59e0b"/>
+                <rect x="186" y="70" width="48" height="168" fill="#ef4444"/>
+                <rect x="234" y="70" width="384" height="112" fill="#6366f1"/>
+                <rect x="234" y="182" width="384" height="56" fill="#10b981"/>
+                <rect x="618" y="70" width="48" height="168" fill="#ef4444"/>
+                <rect x="666" y="70" width="96" height="168" fill="#6366f1" fill-opacity="0.35"/>
+                <rect x="282" y="70" width="48" height="28" fill="#8b5cf6" fill-opacity="1"/>
+            </g>
+            <g stroke="#c7d2fe" stroke-width="1">
+                <line x1="138" y1="70" x2="138" y2="238"/><line x1="186" y1="70" x2="186" y2="238"/><line x1="234" y1="70" x2="234" y2="238"/><line x1="282" y1="70" x2="282" y2="238"/><line x1="330" y1="70" x2="330" y2="238"/><line x1="378" y1="70" x2="378" y2="238"/><line x1="426" y1="70" x2="426" y2="238"/><line x1="474" y1="70" x2="474" y2="238"/><line x1="522" y1="70" x2="522" y2="238"/><line x1="570" y1="70" x2="570" y2="238"/><line x1="618" y1="70" x2="618" y2="238"/><line x1="666" y1="70" x2="666" y2="238"/><line x1="714" y1="70" x2="714" y2="238"/><line x1="90" y1="98" x2="762" y2="98"/><line x1="90" y1="126" x2="762" y2="126"/><line x1="90" y1="154" x2="762" y2="154"/><line x1="90" y1="182" x2="762" y2="182"/><line x1="90" y1="210" x2="762" y2="210"/>
+            </g>
+            <rect x="90" y="70" width="672" height="168" fill="none" stroke="#6366f1" stroke-width="2"/>
+            <g font-size="10" fill="#475569" text-anchor="middle">
+                <text x="114" y="64">0</text><text x="162" y="64">1</text><text x="210" y="64">2</text><text x="258" y="64">3</text><text x="306" y="64">4</text><text x="354" y="64">5</text><text x="402" y="64">6</text><text x="450" y="64">7</text><text x="498" y="64">8</text><text x="546" y="64">9</text><text x="594" y="64">10</text><text x="642" y="64">11</text><text x="690" y="64">12</text><text x="738" y="64">13</text>
+            </g>
+            <text x="426" y="258" font-size="12" fill="#312e81" text-anchor="middle">OFDM 符号索引（1 时隙 = 14 符号）</text>
+            <g font-size="12" fill="#312e81" text-anchor="end">
+                <text x="82" y="88">RB0</text><text x="82" y="116">RB1</text><text x="82" y="144">RB2</text><text x="82" y="172">RB3</text><text x="82" y="200">RB4</text><text x="82" y="228">RB5</text>
+            </g>
+            <text x="60" y="30" font-size="12" fill="#312e81">频域（RB）↑</text>
+            <g font-size="12" fill="#1e293b">
+                <rect x="90" y="290" width="16" height="16" fill="#f59e0b"/><text x="112" y="303">PDCCH / CORESET 控制区</text>
+                <rect x="430" y="290" width="16" height="16" fill="#ef4444"/><text x="452" y="303">DMRS 解调参考信号</text>
+                <rect x="90" y="320" width="16" height="16" fill="#6366f1"/><text x="112" y="333">PDSCH（用户 A）</text>
+                <rect x="430" y="320" width="16" height="16" fill="#10b981"/><text x="452" y="333">PDSCH（用户 B）</text>
+                <rect x="90" y="350" width="16" height="16" fill="#8b5cf6"/><text x="112" y="363">CSI-RS 测量资源</text>
+                <text x="430" y="363" fill="#475569">一个小格 = 1 个 RE（子载波 x 符号）</text>
+            </g>
+        </svg>
+        <figcaption><strong>图 12-1</strong> 一个时隙（14 个 OFDM 符号）内的下行资源网格（为教学示意）。前两个符号留给 PDCCH/CORESET 控制区；DMRS 以两个符号列穿插在数据区域用于信道估计；用户 A 与用户 B 的 PDSCH 按 RB 区间频分复用；CSI-RS 只占少量 RE。这一“控制与数据、参考信号与数据共处一网格”的结构是 5G NR 物理层调度的基础（符号位置简化）。</figcaption>
+        </figure>
+
         <p>OFDM的时频资源以"资源网格"的形式组织：</p>
 
         <ul>
