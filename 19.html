@@ -77,6 +77,34 @@
             <li><strong>端到端编排</strong>：跨域资源协同，保证SLA端到端可达</li>
         </ul>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch19-title fig-ch19-desc" viewBox="0 0 860 330" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch19-title">三类网络切片的端到端隔离</title>
+            <desc id="fig-ch19-desc">在同一套共享的物理基础设施之上，纵向切出 eMBB、URLLC、mMTC 三个切片；每个切片横向跨无线接入网、承载传输网和核心网三个域，各自拥有独立的资源与策略，构成一条端到端的逻辑网络。</desc>
+            <g font-size="12" font-weight="700" text-anchor="middle">
+                <text x="290" y="44" fill="#4338ca">eMBB 切片 · 大带宽</text>
+                <text x="490" y="44" fill="#b91c1c">URLLC 切片 · 低时延</text>
+                <text x="690" y="44" fill="#047857">mMTC 切片 · 大连接</text>
+            </g>
+            <g stroke-width="1.5" stroke-dasharray="6 4">
+                <rect x="200" y="58" width="180" height="208" rx="14" fill="#6366f1" fill-opacity="0.07" stroke="#6366f1"/>
+                <rect x="400" y="58" width="180" height="208" rx="14" fill="#ef4444" fill-opacity="0.07" stroke="#ef4444"/>
+                <rect x="600" y="58" width="180" height="208" rx="14" fill="#10b981" fill-opacity="0.07" stroke="#10b981"/>
+            </g>
+            <g font-size="11" text-anchor="middle">
+                <g fill="#312e81"><rect x="210" y="84" width="160" height="40" rx="8" fill="#6366f1" fill-opacity="0.28"/><text x="290" y="109">RAN：PRB 预留</text><rect x="210" y="142" width="160" height="40" rx="8" fill="#6366f1" fill-opacity="0.28"/><text x="290" y="167">传输：FlexE 硬隔离</text><rect x="210" y="200" width="160" height="40" rx="8" fill="#6366f1" fill-opacity="0.28"/><text x="290" y="225">核心网：AMF/SMF/UPF</text></g>
+                <g fill="#7f1d1d"><rect x="410" y="84" width="160" height="40" rx="8" fill="#ef4444" fill-opacity="0.28"/><text x="490" y="109">RAN：差异化调度</text><rect x="410" y="142" width="160" height="40" rx="8" fill="#ef4444" fill-opacity="0.28"/><text x="490" y="167">传输：低时延通道</text><rect x="410" y="200" width="160" height="40" rx="8" fill="#ef4444" fill-opacity="0.28"/><text x="490" y="225">核心网：本地 UPF</text></g>
+                <g fill="#064e3b"><rect x="610" y="84" width="160" height="40" rx="8" fill="#10b981" fill-opacity="0.28"/><text x="690" y="109">RAN：巨连接接入</text><rect x="610" y="142" width="160" height="40" rx="8" fill="#10b981" fill-opacity="0.28"/><text x="690" y="167">传输：轻量隔离</text><rect x="610" y="200" width="160" height="40" rx="8" fill="#10b981" fill-opacity="0.28"/><text x="690" y="225">核心网：轻量核心</text></g>
+            </g>
+            <g font-size="12" fill="#312e81" text-anchor="end">
+                <text x="190" y="109">无线接入 RAN</text><text x="190" y="167">承载传输网</text><text x="190" y="225">核心网 5GC</text>
+            </g>
+            <line x1="200" y1="290" x2="780" y2="290" stroke="#94a3b8" stroke-width="2"/>
+            <text x="490" y="312" font-size="12" fill="#475569" text-anchor="middle">共享的那一套物理基础设施（基站 / 光纤 / 数据中心）</text>
+        </svg>
+        <figcaption><strong>图 19-1</strong> 网络切片的端到端隔离：底层是共享的物理基础设施，纵向切出 eMBB / URLLC / mMTC 三个切片，每个切片横向贯穿 RAN、传输网、核心网三个域并各自拥有独立资源与策略。图中隔离技术（FlexE、PRB 预留等）为典型做法示意，具体配置随运营商而异。</figcaption>
+        </figure>
+
         <h2>19.2 切片标识：S-NSSAI</h2>
 
         <p>在5G网络中，每个切片都有一个唯一的标识符，叫作<strong>S-NSSAI（Single Network Slice Selection Assistance Information）</strong>。它由两部分组成：</p>

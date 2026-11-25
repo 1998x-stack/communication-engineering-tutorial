@@ -103,6 +103,42 @@
             <li><strong>NFVI</strong>：底层基础设施，包括计算、存储、网络资源，以及硬件加速（GPU、NPU、FPGA）</li>
         </ul>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch20-title fig-ch20-desc" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch20-title">MEC 部署：UPF 下沉与本地分流</title>
+            <desc id="fig-ch20-desc">gNB 经 N3 接入边缘数据中心内的本地 UPF，本地 UPF 把低时延业务分流给同地的 MEC 应用，其余流量再经 N9 送到中心 UPF 并出 Internet。核心网的 SMF/AMF 位于中心数据中心，通过 N4 控制本地 UPF。业务在本地闭环，无需回到中心。</desc>
+            <defs><marker id="fig-ch20-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0ea5e9"/></marker>
+            <marker id="fig-ch20-arg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#64748b"/></marker></defs>
+            <rect x="190" y="58" width="230" height="200" rx="14" fill="#dcfce7" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="305" y="52" font-size="12" font-weight="700" fill="#047857" text-anchor="middle">边缘数据中心 / MEC 主机</text>
+            <rect x="500" y="58" width="330" height="200" rx="14" fill="#eef2ff" fill-opacity="0.3" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="665" y="52" font-size="12" font-weight="700" fill="#4338ca" text-anchor="middle">中心数据中心 / 5GC</text>
+            <rect x="30" y="118" width="100" height="60" rx="9" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="80" y="153" font-size="12" fill="#92400e" text-anchor="middle">UE / gNB</text>
+            <rect x="210" y="95" width="190" height="50" rx="9" fill="#dbeafe" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="305" y="126" font-size="12" fill="#075985" text-anchor="middle">本地 UPF（ULCL）</text>
+            <rect x="210" y="180" width="190" height="50" rx="9" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+            <text x="305" y="211" font-size="12" fill="#5b21b6" text-anchor="middle">MEC 应用（低时延业务）</text>
+            <rect x="520" y="95" width="150" height="50" rx="9" fill="#dbeafe" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="595" y="126" font-size="12" fill="#075985" text-anchor="middle">中心 UPF</text>
+            <rect x="520" y="180" width="150" height="50" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="595" y="211" font-size="12" fill="#312e81" text-anchor="middle">SMF / AMF</text>
+            <rect x="710" y="95" width="110" height="50" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+            <text x="765" y="126" font-size="12" fill="#334155" text-anchor="middle">Internet / 云</text>
+            <line x1="130" y1="148" x2="210" y2="125" stroke="#0ea5e9" stroke-width="2.5" marker-end="url(#fig-ch20-ar)"/>
+            <text x="160" y="118" font-size="11" fill="#075985">N3</text>
+            <line x1="305" y1="145" x2="305" y2="180" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#fig-ch20-ar)"/>
+            <text x="316" y="168" font-size="11" fill="#5b21b6">本地分流</text>
+            <line x1="400" y1="120" x2="520" y2="120" stroke="#64748b" stroke-width="2" marker-end="url(#fig-ch20-arg)"/>
+            <text x="460" y="112" font-size="11" fill="#475569" text-anchor="middle">N9</text>
+            <line x1="670" y1="120" x2="710" y2="120" stroke="#64748b" stroke-width="2" marker-end="url(#fig-ch20-arg)"/>
+            <line x1="595" y1="180" x2="595" y2="145" stroke="#6366f1" stroke-width="2" stroke-dasharray="5 4"/>
+            <text x="602" y="170" font-size="11" fill="#4338ca">N4</text>
+            <text x="430" y="284" font-size="12" fill="#312e81" text-anchor="middle">低时延业务在边缘闭环；其余流量才绕行中心（时延对比为教学示意）</text>
+        </svg>
+        <figcaption><strong>图 20-1</strong> MEC 的关键是 UPF 下沉：gNB 经 N3 接入部署在边缘数据中心的本地 UPF，本地 UPF 把低时延业务分流给同地的 MEC 应用，其余流量经 N9 到中心 UPF 再出 Internet；SMF/AMF 留在中心并通过 N4 控制本地 UPF。接口名为 3GPP 定义，具体分流规则（ULCL/BP）见 20.3 节表格。</figcaption>
+        </figure>
+
         <h2>20.3 5G中的MEC部署方案</h2>
 
         <p>在5G网络中，MEC部署的核心技术手段是<strong>UPF（User Plane Function）下沉</strong>。通过在靠近用户的位置部署UPF，流量可以从RAN侧直接被分流到本地MEC平台，而不经过中心UPF和核心网控制面。3GPP定义了以下几种MEC部署方案：</p>
