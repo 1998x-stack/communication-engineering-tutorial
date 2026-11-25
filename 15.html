@@ -159,6 +159,38 @@ Slot 7:  空载  — 预留
             <p><strong>技术看点：</strong>64T64R不是指64根天线各发各的信号，而是通过数字波束赋形在空间域形成多个独立波束，同时服务多个用户。每个天线振子都有独立的移相器和幅度控制，通过调整各振子信号的相位差，可以让电磁波在特定方向"叠加增强"，在非目标方向"相消削弱"。这就是Massive MIMO"空间复用"的物理基础。</p>
         </div>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch15-title fig-ch15-desc" viewBox="0 0 860 345" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch15-title">5G 基站硬件链路：BBU 到 AAU 与天线阵列</title>
+            <desc id="fig-ch15-desc">机房内的 BBU/DU 完成基带处理，通过 eCPRI 光前传送到塔上的 AAU；AAU 内部包含射频前端、数字处理（DPD 与波束赋形权值计算）和天线振子阵列，阵列经波束赋形把能量定向聚焦给用户。相比 4G 的 RRU 加天线加馈线，AAU 把射频与天线集成在一起以减少馈线损耗。</desc>
+            <rect x="340" y="58" width="300" height="172" rx="14" fill="#dcfce7" fill-opacity="0.4" stroke="#10b981" stroke-width="1.5"/>
+            <text x="490" y="82" font-size="13" font-weight="700" fill="#065f46" text-anchor="middle">AAU · 有源天线单元（塔上）</text>
+            <rect x="358" y="96" width="130" height="54" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="423" y="119" font-size="11" fill="#92400e" text-anchor="middle">射频前端</text><text x="423" y="136" font-size="11" fill="#92400e" text-anchor="middle">PA / LNA / 滤波器</text>
+            <rect x="500" y="96" width="122" height="54" rx="8" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="561" y="119" font-size="11" fill="#075985" text-anchor="middle">数字处理</text><text x="561" y="136" font-size="11" fill="#075985" text-anchor="middle">DPD/CFR+波束权值</text>
+            <g fill="#10b981">
+                <circle cx="372" cy="176" r="4"/><circle cx="396" cy="176" r="4"/><circle cx="420" cy="176" r="4"/><circle cx="444" cy="176" r="4"/><circle cx="468" cy="176" r="4"/><circle cx="492" cy="176" r="4"/><circle cx="516" cy="176" r="4"/><circle cx="540" cy="176" r="4"/><circle cx="564" cy="176" r="4"/><circle cx="588" cy="176" r="4"/><circle cx="612" cy="176" r="4"/>
+                <circle cx="372" cy="196" r="4"/><circle cx="396" cy="196" r="4"/><circle cx="420" cy="196" r="4"/><circle cx="444" cy="196" r="4"/><circle cx="468" cy="196" r="4"/><circle cx="492" cy="196" r="4"/><circle cx="516" cy="196" r="4"/><circle cx="540" cy="196" r="4"/><circle cx="564" cy="196" r="4"/><circle cx="588" cy="196" r="4"/><circle cx="612" cy="196" r="4"/>
+                <circle cx="372" cy="216" r="4"/><circle cx="396" cy="216" r="4"/><circle cx="420" cy="216" r="4"/><circle cx="444" cy="216" r="4"/><circle cx="468" cy="216" r="4"/><circle cx="492" cy="216" r="4"/><circle cx="516" cy="216" r="4"/><circle cx="540" cy="216" r="4"/><circle cx="564" cy="216" r="4"/><circle cx="588" cy="216" r="4"/><circle cx="612" cy="216" r="4"/>
+            </g>
+            <text x="490" y="246" font-size="11" fill="#065f46" text-anchor="middle">天线振子阵列（64T64R，此处为示意）</text>
+            <rect x="50" y="238" width="190" height="76" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="145" y="272" font-size="12" fill="#312e81" text-anchor="middle">BBU / DU（机房）</text>
+            <text x="145" y="294" font-size="11" fill="#312e81" text-anchor="middle">基带处理 · 调度</text>
+            <line x1="240" y1="250" x2="360" y2="232" stroke="#f59e0b" stroke-width="3"/>
+            <text x="290" y="228" font-size="11" fill="#b45309" text-anchor="middle">eCPRI 光前传 25/50GE</text>
+            <rect x="742" y="176" width="96" height="50" rx="9" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="790" y="207" font-size="12" fill="#92400e" text-anchor="middle">用户</text>
+            <g stroke="#10b981" stroke-width="2" fill="none">
+                <path d="M640 120 L742 190"/><path d="M640 145 L742 200"/><path d="M640 170 L742 210"/>
+            </g>
+            <text x="700" y="150" font-size="11" fill="#047857" text-anchor="middle">波束赋形 → 定向覆盖</text>
+            <text x="430" y="334" font-size="12" fill="#312e81" text-anchor="middle">AAU 把 RRU 与天线集成，省去馈线、降低损耗；BBU 与 AAU 之间经光前传连接</text>
+        </svg>
+        <figcaption><strong>图 15-1</strong> 5G 基站硬件链路（示意图）：机房 BBU/DU 完成基带处理后经 eCPRI 光前传送至塔上 AAU；AAU 内含射频前端、数字处理（DPD/CFR 与波束赋形权值计算）和天线振子阵列，阵列经波束赋形把能量定向聚焦给用户。阵列规模 64T64R 与接口速率见 15.3 / 15.4 节，图中振子数量为示意。</figcaption>
+        </figure>
+
         <h2>15.4 RRU与CPRI/eCPRI接口</h2>
 
         <p>在4G时代，基站采用BBU+RRU的分离架构：BBU放机房，RRU上塔安装，两者之间通过CPRI（Common Public Radio Interface）光纤连接。5G时代，AAU将RRU与天线合二为一，但接口原理一脉相承。</p>
