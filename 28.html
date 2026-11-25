@@ -145,6 +145,34 @@
             <li><strong>再生载荷（Regenerative Payload）：</strong>卫星上搭载完整的基带处理单元，可以做解调译码、路由转发、甚至协议终结。优点是频谱效率高、星间链路可实现、支持Mesh组网；缺点是卫星复杂、成本高、功耗大。适用于GEO（静止轨道）和中轨卫星。</li>
         </ul>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch28-title fig-ch28-desc" viewBox="0 0 860 270" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch28-title">NTN 星地融合：直连卫星与地面网关</title>
+            <desc id="fig-ch28-desc">卫星在轨道上与用户终端建立服务链路，同时经馈电链路连接地面信关站，信关站再接入 6G 核心网；相邻卫星之间可用星间链路组网，使偏远与海洋区域也能获得覆盖。卫星载荷可为透明转发或星上再生两种形式。</desc>
+            <defs><marker id="fig-ch28-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4338ca"/></marker></defs>
+            <rect x="400" y="40" width="60" height="34" rx="6" fill="#eef2ff" stroke="#4338ca" stroke-width="1.5"/>
+            <rect x="340" y="48" width="54" height="18" fill="#93c5fd" stroke="#3b82f6"/><rect x="466" y="48" width="54" height="18" fill="#93c5fd" stroke="#3b82f6"/>
+            <rect x="680" y="40" width="60" height="34" rx="6" fill="#eef2ff" stroke="#4338ca" stroke-width="1.5"/>
+            <rect x="620" y="48" width="54" height="18" fill="#93c5fd" stroke="#3b82f6"/><rect x="746" y="48" width="54" height="18" fill="#93c5fd" stroke="#3b82f6"/>
+            <line x1="460" y1="57" x2="680" y2="57" stroke="#64748b" stroke-width="2" stroke-dasharray="6 5"/>
+            <text x="570" y="50" font-size="11" fill="#475569" text-anchor="middle">星间链路 ISL</text>
+            <rect x="70" y="196" width="150" height="54" rx="9" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="145" y="220" font-size="11" fill="#92400e" text-anchor="middle">UE 直连卫星</text>
+            <text x="145" y="238" font-size="10" fill="#92400e" text-anchor="middle">手持 / 物联网</text>
+            <rect x="380" y="196" width="150" height="54" rx="9" fill="#dcfce7" stroke="#10b981" stroke-width="1.5"/>
+            <text x="455" y="228" font-size="11" fill="#065f46" text-anchor="middle">地面信关站</text>
+            <rect x="620" y="196" width="190" height="54" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="715" y="228" font-size="11" fill="#312e81" text-anchor="middle">6G 核心网 / 数据中心</text>
+            <line x1="400" y1="74" x2="160" y2="196" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#fig-ch28-ar)"/>
+            <text x="235" y="140" font-size="11" fill="#b45309">服务链路（用户↔卫星）</text>
+            <line x1="437" y1="74" x2="452" y2="196" stroke="#10b981" stroke-width="2.5" marker-end="url(#fig-ch28-ar)"/>
+            <text x="500" y="150" font-size="11" fill="#047857">馈电链路</text>
+            <line x1="530" y1="223" x2="620" y2="223" stroke="#6366f1" stroke-width="2.5" marker-end="url(#fig-ch28-ar)"/>
+            <text x="430" y="268" font-size="11" fill="#475569" text-anchor="middle">载荷形式：透明转发（卫星仅弯管）或星上再生（星上基带处理）</text>
+        </svg>
+        <figcaption><strong>图 28-1</strong> NTN 星地融合示意：卫星与用户终端建立服务链路，同时经馈电链路连到地面信关站并接入 6G 核心网；相邻卫星可经星间链路（ISL）组网。载荷分透明转发与星上再生两种，优缺点见 28.3 节。轨道高度与链路为示意。</figcaption>
+        </figure>
+
         <h3>星地融合应用场景</h3>
 
         <table>

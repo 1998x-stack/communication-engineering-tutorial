@@ -106,6 +106,36 @@
 
         <h2>24.2 OpenAirInterface (OAI)</h2>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch24-title fig-ch24-desc" viewBox="0 0 860 240" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch24-title">开源 5G 端到端实验网拓扑</title>
+            <desc id="fig-ch24-desc">软件 UE（UERANSIM）经 Uu 空口接入软件基站（srsRAN 配合通用 SDR），基站经 N2/N3 接入开源核心网（Open5GS），再经 N6 到达数据网络，构成一套可在通用服务器上跑起来的端到端 5G 实验网。</desc>
+            <defs><marker id="fig-ch24-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6366f1"/></marker></defs>
+            <g fill="#eef2ff" stroke="#6366f1" stroke-width="1.5">
+                <rect x="60" y="90" width="160" height="66" rx="10"/>
+                <rect x="250" y="90" width="160" height="66" rx="10"/>
+                <rect x="440" y="90" width="160" height="66" rx="10"/>
+                <rect x="630" y="90" width="160" height="66" rx="10"/>
+            </g>
+            <g font-size="12" fill="#312e81" text-anchor="middle" font-weight="600">
+                <text x="140" y="118">UERANSIM（UE）</text><text x="140" y="138" font-size="10" font-weight="400">软件终端</text>
+                <text x="330" y="118">srsRAN（gNB）</text><text x="330" y="138" font-size="10" font-weight="400">+ 通用 SDR</text>
+                <text x="520" y="118">Open5GS（5GC）</text><text x="520" y="138" font-size="10" font-weight="400">AMF/SMF/UPF</text>
+                <text x="710" y="118">数据网络</text><text x="710" y="138" font-size="10" font-weight="400">Internet / 本地服务</text>
+            </g>
+            <g stroke="#6366f1" stroke-width="2.5">
+                <line x1="220" y1="123" x2="250" y2="123" marker-end="url(#fig-ch24-ar)"/>
+                <line x1="410" y1="123" x2="440" y2="123" marker-end="url(#fig-ch24-ar)"/>
+                <line x1="600" y1="123" x2="630" y2="123" marker-end="url(#fig-ch24-ar)"/>
+            </g>
+            <g font-size="11" fill="#4338ca" text-anchor="middle">
+                <text x="235" y="112">Uu</text><text x="425" y="112">N2/N3</text><text x="615" y="112">N6</text>
+            </g>
+            <text x="430" y="206" font-size="11" fill="#475569" text-anchor="middle">全部组件可运行在通用服务器 / 小型 SDR 上，用于协议验证与教学实验</text>
+        </svg>
+        <figcaption><strong>图 24-1</strong> 开源 5G 端到端实验网（示意）：UERANSIM 扮演软件 UE，srsRAN 配合通用 SDR 扮演 gNB，Open5GS 提供服务化核心网，经 N6 到达数据网络。各开源项目的具体功能与许可见 24.2–24.5 节。图中接口名为 3GPP 定义，硬件配置为典型示例。</figcaption>
+        </figure>
+
         <p>OAI是开源5G领域最具影响力的项目，由法国EURECOM研究所发起，至今已有超过15年的历史。OAI支持3GPP Release 15/16的5G NR SA模式，包含完整的L1/L2/L3协议栈。</p>
 
         <h3>OAI架构</h3>

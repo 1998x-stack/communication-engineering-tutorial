@@ -106,6 +106,32 @@
 
         <h2>25.2 频谱分析仪与信号分析仪</h2>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch25-title fig-ch25-desc" viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch25-title">仪表测试的典型连接</title>
+            <desc id="fig-ch25-desc">被测设备（基站或终端）通过射频线（含衰减器）连接到综测仪或矢量信号分析仪，仪表再把测量结果送给上位机分析软件；软件完成 EVM、ACLR、频谱模板、吞吐量等指标的统计与判定。</desc>
+            <defs><marker id="fig-ch25-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0ea5e9"/></marker></defs>
+            <g fill="#eef2ff" stroke="#6366f1" stroke-width="1.5">
+                <rect x="60" y="80" width="200" height="70" rx="10"/>
+                <rect x="330" y="80" width="200" height="70" rx="10"/>
+                <rect x="600" y="80" width="200" height="70" rx="10"/>
+            </g>
+            <g font-size="12" fill="#312e81" text-anchor="middle" font-weight="600">
+                <text x="160" y="110">被测设备 DUT</text><text x="160" y="130" font-size="10" font-weight="400">基站 / 终端 / 模组</text>
+                <text x="430" y="110">综测仪 / 信号分析仪</text><text x="430" y="130" font-size="10" font-weight="400">矢量解调 / 频谱测量</text>
+                <text x="700" y="110">分析软件</text><text x="700" y="130" font-size="10" font-weight="400">EVM / ACLR / 吞吐量</text>
+            </g>
+            <g stroke="#0ea5e9" stroke-width="2.5">
+                <line x1="260" y1="115" x2="330" y2="115" marker-end="url(#fig-ch25-ar)"/>
+                <line x1="530" y1="115" x2="600" y2="115" marker-end="url(#fig-ch25-ar)"/>
+            </g>
+            <text x="295" y="106" font-size="11" fill="#075985" text-anchor="middle">射频</text>
+            <text x="565" y="106" font-size="11" fill="#075985" text-anchor="middle">数据</text>
+            <text x="430" y="192" font-size="11" fill="#475569" text-anchor="middle">外场路测时，扫频仪 + GPS + 测试终端随车测量，与实验室仪表测量互补</text>
+        </svg>
+        <figcaption><strong>图 25-1</strong> 仪表测试的典型连接（示意）：被测设备经射频线接综测仪/矢量信号分析仪，仪表把结果送给上位机软件做 EVM、ACLR、频谱模板与吞吐量判定；外场则由扫频仪、GPS 与测试终端随车测量。各仪表型号与测量标准见 25.2–25.8 节。</figcaption>
+        </figure>
+
         <p>频谱分析仪是射频工程师最常用的"第一台仪表"。它的基本功能是显示信号的功率随频率的分布，但现代信号分析仪（如Keysight N9042B、R&S FSW）的能力远超于此。</p>
 
         <h3>三个核心测量项</h3>
