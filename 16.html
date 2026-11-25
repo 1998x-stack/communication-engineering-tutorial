@@ -65,6 +65,35 @@
         <h3>覆盖目标定义</h3>
         <p>在开始选址之前，首先要明确这个站要覆盖什么区域。是覆盖一条高速公路，还是覆盖一个居民小区，还是覆盖一个商场？目标不同，站址选择的优先级完全不同。覆盖高速公路需要沿公路两侧交替布局；覆盖小区需要选在小区中心位置或制高点；覆盖商场则要考虑室内分布系统的配合。</p>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch16-title fig-ch16-desc" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch16-title">三扇区方位角与下倾角的俯视与侧视示意</title>
+            <desc id="fig-ch16-desc">左图为俯视图：三扇区基站天线按方位角 0°、120°、240° 均匀分布，各自覆盖一个约 120 度的扇形；右图为侧视图：天线波束向下倾斜形成下倾角，通过调整下倾角控制覆盖距离，避免越区覆盖。</desc>
+            <text x="250" y="26" font-size="13" font-weight="700" fill="#312e81" text-anchor="middle">俯视：三扇区方位角</text>
+            <text x="660" y="26" font-size="13" font-weight="700" fill="#312e81" text-anchor="middle">侧视：下倾角控制覆盖</text>
+            <g fill="#6366f1" fill-opacity="0.22" stroke="#4338ca" stroke-width="1.5">
+                <path d="M250,160 L154.7,105 A110,110 0 0 1 345.3,105 Z"/>
+                <path d="M250,160 L345.3,105 A110,110 0 0 1 250,270 Z"/>
+                <path d="M250,160 L250,270 A110,110 0 0 1 154.7,215 Z"/>
+            </g>
+            <circle cx="250" cy="160" r="5" fill="#312e81"/>
+            <g font-size="12" fill="#312e81" text-anchor="middle">
+                <text x="250" y="44">0°</text><text x="362" y="240">120°</text><text x="138" y="240">240°</text>
+            </g>
+            <line x1="430" y1="50" x2="430" y2="280" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="5 5"/>
+            <line x1="570" y1="250" x2="570" y2="80" stroke="#64748b" stroke-width="4"/>
+            <rect x="558" y="70" width="24" height="42" rx="4" fill="#10b981" stroke="#065f46" stroke-width="1.5"/>
+            <path d="M582 84 L820 200 L820 268 Z" fill="#6366f1" fill-opacity="0.2" stroke="#4338ca" stroke-width="1.5"/>
+            <line x1="582" y1="84" x2="820" y2="84" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5"/>
+            <text x="700" y="78" font-size="11" fill="#475569" text-anchor="middle">水平方向</text>
+            <text x="660" y="150" font-size="11" fill="#4338ca">下倾角</text>
+            <text x="640" y="240" font-size="11" fill="#312e81">覆盖距离</text>
+            <text x="520" y="250" font-size="11" fill="#475569" text-anchor="end">塔桅</text>
+            <text x="660" y="290" font-size="11" fill="#475569" text-anchor="middle">站高：城区 30~50 m，郊区/农村 50~80 m（典型值）</text>
+        </svg>
+        <figcaption><strong>图 16-1</strong> 天线方位角与下倾角示意（为教学示意）：左为俯视图，三扇区基站按 0°/120°/240° 均匀分布，每扇区覆盖约 120°；右为侧视图，波束向下倾斜形成下倾角，加大下倾角可缩短覆盖、降低越区干扰。站高与角度取值范围见 16.1 节正文。</figcaption>
+        </figure>
+
         <h3>站高与方位角规划</h3>
         <p>理想的宏站站高通常在30 ~ 50米（城区）或50 ~ 80米（郊区/农村）。站高太低覆盖不够，站高太高又容易造成越区覆盖——信号"飘"到远处的另一个小区，干扰人家的上下行通信。</p>
 
