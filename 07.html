@@ -86,6 +86,35 @@
             <p><strong>工程亮点：</strong>蜂窝系统的频率复用方案有一个从"硬复用"到"软复用"的演进趋势。2G时代复用因子7-12（频率严格错开），3G时代复用因子1（CDMA天然软容量），4G/5G也是复用因子1（利用ICIC干扰协调和波束赋形控制干扰）。复用因子越低，频谱效率越高，但干扰管理越复杂。</p>
         </div>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch7-title fig-ch7-desc" viewBox="0 0 860 345" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch7-title">N=7 的频率复用模型</title>
+            <desc id="fig-ch7-desc">一个中心小区加六个相邻小区构成七小区复用簇，每簇内的七个小区使用互不相同的频点 F1 到 F7。簇外的右侧小区可以重新使用 F1，同一频点的两个小区之间的最小中心距离称为复用距离，约等于根号下三倍复用因子乘以小区半径。</desc>
+            <g stroke="#ffffff" stroke-width="2">
+                <polygon points="430,120 386.7,145 386.7,195 430,220 473.3,195 473.3,145" fill="#6366f1"/>
+                <polygon points="473.3,45 430,70 430,120 473.3,145 516.6,120 516.6,70" fill="#0ea5e9"/>
+                <polygon points="386.7,45 343.4,70 343.4,120 386.7,145 430,120 430,70" fill="#f59e0b"/>
+                <polygon points="516.6,120 473.3,145 473.3,195 516.6,220 559.9,195 559.9,145" fill="#10b981"/>
+                <polygon points="343.4,120 300.1,145 300.1,195 343.4,220 386.7,195 386.7,145" fill="#ef4444"/>
+                <polygon points="473.3,195 430,220 430,270 473.3,295 516.6,270 516.6,220" fill="#8b5cf6"/>
+                <polygon points="386.7,195 343.4,220 343.4,270 386.7,295 430,270 430,220" fill="#14b8a6"/>
+                <polygon points="603.2,120 559.9,145 559.9,195 603.2,220 646.5,195 646.5,145" fill="#6366f1" stroke="#312e81" stroke-dasharray="6 4"/>
+            </g>
+            <g font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+                <text x="430" y="177">F1</text><text x="473.3" y="102">F2</text><text x="386.7" y="102">F3</text>
+                <text x="516.6" y="177">F4</text><text x="343.4" y="177">F5</text>
+                <text x="473.3" y="252">F6</text><text x="386.7" y="252">F7</text><text x="603.2" y="177">F1</text>
+            </g>
+            <line x1="430" y1="315" x2="603" y2="315" stroke="#312e81" stroke-width="2" stroke-dasharray="6 4"/>
+            <line x1="430" y1="309" x2="430" y2="321" stroke="#312e81" stroke-width="2"/>
+            <line x1="603" y1="309" x2="603" y2="321" stroke="#312e81" stroke-width="2"/>
+            <text x="516" y="338" font-size="13" fill="#312e81" text-anchor="middle">复用距离 D ≈ √(3N)·R（N=7 时约为 4.6R）</text>
+            <text x="700" y="120" font-size="13" fill="#312e81">同一簇内</text>
+            <text x="700" y="140" font-size="13" fill="#312e81">7 个频点互不相同</text>
+        </svg>
+        <figcaption><strong>图 7-1</strong> N=7 频率复用：每 7 个小区为一簇，簇内 F1–F7 互不重复；相隔一个复用距离后同一频点可再次使用（右侧虚线 F1）。复用距离 D≈√(3N)·R 随复用因子 N 增大而增大，同频干扰也随之降低，代价是每小区可用带宽缩小。图中半径与间距为教学示意。</figcaption>
+        </figure>
+
         <h2>7.2 2G GSM：电路交换的黄金时代</h2>
 
         <p>GSM（全球移动通信系统）是2G时代的代表，也是第一个真正意义上的全球统一数字移动通信标准。它的网络架构由三部分组成：</p>
