@@ -295,6 +295,32 @@ DRB层: gNB 将 QoS Flow 映射到 DRB（数据无线承载）
    ↓
 空口: MAC 层调度器根据 5QI 优先级执行资源分配</code></pre>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch21-title fig-ch21-desc" viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch21-title">从 QoS Flow 到 DRB 再到空口调度的映射</title>
+            <desc id="fig-ch21-desc">一个 PDU 会话内包含多条 QoS Flow，每条 Flow 由 QFI 和 5QI 标识；gNB 把多条 QoS Flow 映射到数据无线承载 DRB，同一 DRB 上的包在空口获得相同调度优先级；PCF 产生 PCC 规则、SMF 下发 QoS Profile，最终由 MAC 调度器按 5QI 的优先级与时延预算分配资源。</desc>
+            <defs><marker id="fig-ch21-ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#64748b"/></marker></defs>
+            <rect x="320" y="28" width="140" height="42" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/><text x="390" y="54" font-size="12" fill="#92400e" text-anchor="middle">PCF 策略控制</text>
+            <rect x="480" y="28" width="150" height="42" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/><text x="555" y="54" font-size="12" fill="#92400e" text-anchor="middle">SMF 会话管理</text>
+            <path d="M555 70 L555 90 L200 90 L200 100" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="378" y="84" font-size="11" fill="#b45309" text-anchor="middle">PCC 规则 / QoS Profile</text>
+            <rect x="40" y="100" width="350" height="170" rx="12" fill="#eef2ff" fill-opacity="0.4" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="215" y="118" font-size="12" font-weight="700" fill="#312e81" text-anchor="middle">PDU 会话（UE 应用：语音 / 视频 / 数据）</text>
+            <rect x="55" y="126" width="320" height="38" rx="7" fill="#ef4444" fill-opacity="0.25"/><text x="215" y="150" font-size="11" fill="#7f1d1d" text-anchor="middle">QFI=1 · 5QI=1 · 语音（GBR）</text>
+            <rect x="55" y="170" width="320" height="38" rx="7" fill="#6366f1" fill-opacity="0.2"/><text x="215" y="194" font-size="11" fill="#312e81" text-anchor="middle">QFI=2 · 5QI=6 · 视频流</text>
+            <rect x="55" y="214" width="320" height="38" rx="7" fill="#10b981" fill-opacity="0.2"/><text x="215" y="238" font-size="11" fill="#064e3b" text-anchor="middle">QFI=3 · 5QI=9 · 数据（Non-GBR）</text>
+            <rect x="540" y="126" width="270" height="38" rx="7" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/><text x="675" y="150" font-size="11" fill="#075985" text-anchor="middle">DRB1（承载 QFI 1）</text>
+            <rect x="540" y="192" width="270" height="38" rx="7" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/><text x="675" y="216" font-size="11" fill="#075985" text-anchor="middle">DRB2（承载 QFI 2 与 3）</text>
+            <line x1="375" y1="145" x2="540" y2="145" stroke="#64748b" stroke-width="2" marker-end="url(#fig-ch21-ar)"/>
+            <path d="M375 189 L470 189 L470 211 L540 211" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#fig-ch21-ar)"/>
+            <path d="M375 233 L470 233 L470 211" fill="none" stroke="#64748b" stroke-width="2"/>
+            <text x="675" y="252" font-size="11" fill="#475569" text-anchor="middle">多条相似 QoS Flow 可合并到同一条 DRB 节省空口资源</text>
+            <rect x="540" y="266" width="270" height="40" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="675" y="291" font-size="11" fill="#312e81" text-anchor="middle">空口 MAC 调度：按 5QI 优先级 / PDB 分配</text>
+        </svg>
+        <figcaption><strong>图 21-1</strong> 端到端 QoS 映射（为教学示意）：一个 PDU 会话下有多条 QoS Flow，各由 QFI / 5QI 标识；gNB 将 Flow 映射到 DRB，同一 DRB 上的包获得相同空口调度优先级；PCF 产生 PCC 规则、SMF 下发 QoS Profile，最终由 MAC 调度器按 5QI 的优先级与时延预算分配资源。QFI / 5QI 取值为常见配置示例。</figcaption>
+        </figure>
+
         <p>gNB在其中的角色至关重要——它需要将一个或多个QoS Flow映射到合适的DRB上。同一条DRB上的所有数据包在空口侧获得相同的调度优先级。一般来说，相同或相似5QI值的QoS Flow会被映射到同一条DRB以节省空口资源。</p>
 
         <div class="tip">
