@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第4章 无线信道与传播模型</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        html, body { max-width: 100%; }
+        img, svg { max-width: 100%; height: auto; }
+        pre, code { overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { word-break: break-word; overflow-wrap: anywhere; }
+    </style>
 </head>
 <body>
+<a class="skip-link" href="#content" style="position:absolute;left:-999px;">跳转至正文</a>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="章节导航">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 通信工程概述</a></li>
@@ -41,8 +50,8 @@
 <li><a href="27.html">第27章 6G关键技术</a></li>
 <li><a href="28.html">第28章 6G系统设计与综合项目</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content"><article>
         <h1>📡 第4章 无线信道与传播模型</h1>
 
         <p>大家好，我是你们的讲师。上一章我们讲了调制——信号经过精心调制后，从天线发射了出去。然后呢？信号在空中经历了什么？为什么有时候你站在窗边信号满格，走到房间角落就只剩一格？为什么高铁上打电话经常断断续续？为什么演唱会现场几万人同时刷手机、网络却不瘫痪？</p>
@@ -167,6 +176,45 @@ f_d = 83.3 × 3.5×10⁹ / 3×10⁸ ≈ 972 Hz</code></pre>
 
         <p>这一点直接解释了为什么OFDM是4G/5G的核心技术：OFDM将宽带信号划分为多个窄带子载波，每个子载波的带宽都小于相干带宽，因此每个子载波经历的是<strong>平坦衰落</strong>——接收端的均衡变得非常简单。这是"化整为零、各个击破"的工程智慧。</p>
 
+        <figure>
+        <svg role="img" aria-labelledby="fig-ch4-title fig-ch4-desc" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-ch4-title">多径传播如何导致时延扩展与频率选择性衰落</title>
+            <desc id="fig-ch4-desc">左图：发射机与接收机之间存在多条传播路径——直射、一次反射、散射，路径长度不同故到达时间不同。右图：接收端功率随时延分布为多个抽头，最后一个抽头的相对时延即时延扩展；相干带宽约等于时延扩展的倒数，信号带宽大于它时会出现频率选择性衰落。</desc>
+            <g font-size="14" font-weight="600" fill="#312e81">
+                <text x="20" y="24">① 同一信号的多个副本</text>
+                <text x="450" y="24">② 接收功率—时延分布（功率时延谱）</text>
+            </g>
+            <rect x="20" y="40" width="400" height="235" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+            <rect x="450" y="40" width="390" height="235" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+            <rect x="36" y="150" width="30" height="46" rx="6" fill="#6366f1"/>
+            <text x="51" y="140" font-size="12" fill="#312e81" text-anchor="middle">发射</text>
+            <rect x="352" y="148" width="30" height="50" rx="6" fill="#0ea5e9"/>
+            <text x="367" y="138" font-size="12" fill="#312e81" text-anchor="middle">接收</text>
+            <path d="M66 173 L352 173" stroke="#10b981" stroke-width="3" fill="none"/>
+            <text x="209" y="166" font-size="12" fill="#047857" text-anchor="middle">直射（LOS）</text>
+            <path d="M66 168 L150 74 L280 74 L352 168" stroke="#f59e0b" stroke-width="3" fill="none"/>
+            <text x="209" y="66" font-size="12" fill="#b45309" text-anchor="middle">一次反射（建筑）→ 迟到</text>
+            <path d="M66 178 L200 250 L300 250 L352 178" stroke="#ef4444" stroke-width="3" fill="none"/>
+            <text x="245" y="272" font-size="12" fill="#b91c1c" text-anchor="middle">散射（路灯/树叶）→ 最晚到</text>
+            <line x1="480" y1="245" x2="820" y2="245" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="480" y1="245" x2="480" y2="70" stroke="#94a3b8" stroke-width="2"/>
+            <text x="490" y="262" font-size="12" fill="#475569">延迟 τ</text>
+            <text x="462" y="80" font-size="12" fill="#475569" text-anchor="middle" transform="rotate(-90 462 160)">功率</text>
+            <rect x="500" y="90" width="52" height="155" fill="#10b981" opacity="0.85"/>
+            <rect x="588" y="150" width="52" height="95" fill="#f59e0b" opacity="0.85"/>
+            <rect x="676" y="185" width="52" height="60" fill="#ef4444" opacity="0.85"/>
+            <rect x="764" y="215" width="52" height="30" fill="#6366f1" opacity="0.85"/>
+            <g stroke="#dc2626" stroke-width="2" stroke-dasharray="5 4">
+                <line x1="526" y1="76" x2="526" y2="245"/><line x1="790" y1="76" x2="790" y2="245"/>
+            </g>
+            <line x1="526" y1="84" x2="790" y2="84" stroke="#dc2626" stroke-width="2" marker-end="url(#fig-ch4-arrow)"/>
+            <defs><marker id="fig-ch4-arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#dc2626"/></marker></defs>
+            <text x="658" y="102" font-size="12" fill="#b91c1c" text-anchor="middle">时延扩展 τ_max</text>
+            <text x="645" y="232" font-size="12" fill="#312e81" text-anchor="middle">相干带宽 B_c ≈ 1/τ_max</text>
+        </svg>
+        <figcaption><strong>图 4-1</strong> 多径传播（反射/绕射/散射）产生多个到达时间不同的副本，其功率—时延分布的最大相对时延即时延扩展 τ_max。各子载波的相干带宽 B_c 近似等于 1/τ_max，当信号带宽超过 B_c 时出现频率选择性衰落——这正是 OFDM 把宽带拆成窄带子载波的原因。图中时延值与功率比例均为教学示意。</figcaption>
+        </figure>
+
         <h2>4.5 3GPP信道模型：TDL与CDL</h2>
 
         <p>在5G系统仿真和测试中，工程师不会直接用理论公式——而是使用3GPP标准化的信道模型。这些模型通过抽头延迟线（TDL，Tapped Delay Line）和簇延迟线（CDL，Clustered Delay Line）来模拟真实信道：</p>
@@ -217,7 +265,7 @@ f_d = 83.3 × 3.5×10⁹ / 3×10⁸ ≈ 972 Hz</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="05.html">下一章 →</a>
         </div>
-    </div>
+    </article></main>
 </div>
 </div>
 </body>
