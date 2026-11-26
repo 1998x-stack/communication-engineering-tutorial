@@ -12,6 +12,11 @@
         pre { max-width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         td, th { word-break: break-word; overflow-wrap: anywhere; }
+        .fw-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+        .fw-btn { padding: 6px 16px; border-radius: 10px; border: 1px solid #6366f1; background: #eef2ff; color: #3730a3; font-weight: 600; cursor: pointer; }
+        .fw-btn[aria-pressed="true"] { background: #6366f1; color: #fff; }
+        .fw-btn:focus-visible { outline: 3px solid #4338ca; outline-offset: 2px; }
+        #fw-out { display: inline-block; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -76,7 +81,20 @@
 
         <h2>4.2 大尺度衰落：路径损耗模型</h2>
 
-        <p>大尺度衰落描述的是信号在较长距离（百米到公里级）上的平均衰减趋势。最基础的模型是<strong>自由空间路径损耗</strong>：</p>
+        <p>大尺度衰落描述的是信号在较长距离（百米到公里级）上的平均衰减趋势。最基础的模型是<strong>自由空间路径损耗</strong>（Friis 传输公式的对数形式）：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="自由空间路径损耗公式，可横向滚动">
+                <math display="block" aria-label="自由空间路径损耗的分贝值等于 20 倍以 10 为底距离的对数，加上 20 倍以 10 为底频率的对数，再加 32.44">
+                    <msub><mi>PL</mi><mtext>dB</mtext></msub><mo>=</mo>
+                    <mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>d</mi><mo>)</mo>
+                    <mo>+</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>f</mi><mo>)</mo>
+                    <mo>+</mo><mn>32.44</mn>
+                </math>
+            </div>
+        </div>
+
+        <p>其中 PL 以 dB 为单位，d 为距离（km），f 为频率（MHz）。
 
         <pre><code>自由空间路径损耗（Friis公式）：
 PL(d) = 20 log₁₀(d) + 20 log₁₀(f) + 32.44
@@ -89,6 +107,17 @@ PL = 20 log₁₀(1) + 20 log₁₀(3500) + 32.44
 
 也就是：发射功率100W (50dBm)，到达1km外只剩下大约0.05mW (-53dBm)，
 衰减了200万倍！</code></pre>
+
+        <div class="tip" role="group" aria-labelledby="fw-label">
+            <p id="fw-label"><strong>算一算：</strong>选择距离，估算 3.5 GHz 信号在自由空间（视距）下的传播损耗：</p>
+            <p class="fw-btns">
+                <button type="button" class="fw-btn" data-d="1">1 km</button>
+                <button type="button" class="fw-btn" data-d="5">5 km</button>
+                <button type="button" class="fw-btn" data-d="10">10 km</button>
+            </p>
+            <output id="fw-out" aria-live="polite">请选择一个距离</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按上式 PL = 20log₁₀(d_km) + 20log₁₀(f_MHz) + 32.44 计算，未计入天线增益与环境损耗。</p>
+        </div>
 
         <p>当然，实际环境远比自由空间复杂。下面是几个常用的大尺度衰落模型对比：</p>
 
@@ -140,7 +169,18 @@ PL = 20 log₁₀(1) + 20 log₁₀(3500) + 32.44
 
         <p>如果说大尺度衰落描述的是信号"平均趋势"的缓慢变化，小尺度衰落描述的就是在几个波长范围内信号幅度的快速剧烈波动。</p>
 
-        <p><strong>多普勒效应</strong>：当终端相对基站移动时，接收信号频率会发生偏移。高铁以300km/h行驶时，在3.5GHz频段上产生的多普勒频移约为：</p>
+        <p><strong>多普勒效应</strong>：当终端相对基站移动时，接收信号频率会发生偏移，偏移量与移动速度成正比：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="多普勒频移公式，可横向滚动">
+                <math display="block" aria-label="多普勒频移等于移动速度乘以载波频率再除以光速">
+                    <msub><mi>f</mi><mi>d</mi></msub><mo>=</mo>
+                    <mfrac><mrow><mi>v</mi><msub><mi>f</mi><mi>c</mi></msub></mrow><mi>c</mi></mfrac>
+                </math>
+            </div>
+        </div>
+
+        <p>高铁以300km/h行驶时，在3.5GHz频段上产生的多普勒频移约为：</p>
 
         <pre><code>f_d = v · f_c / c
 
@@ -268,5 +308,22 @@ f_d = 83.3 × 3.5×10⁹ / 3×10⁸ ≈ 972 Hz</code></pre>
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var F_MHZ = 3500;
+    var out = document.getElementById('fw-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.fw-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var d = parseFloat(b.getAttribute('data-d'));
+            var pl = 20 * Math.log10(d) + 20 * Math.log10(F_MHZ) + 32.44;
+            out.textContent = '距离 ' + d + ' km：路径损耗 \u2248 ' + pl.toFixed(1) + ' dB';
+        });
+    });
+})();
+</script>
 </body>
 </html>
