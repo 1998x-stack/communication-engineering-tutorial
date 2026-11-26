@@ -66,6 +66,21 @@
 
         <p>OFDM的关键在于"正交"二字。子载波之间的频率间隔Δf = 1/T<sub>symbol</sub>，即等于符号周期的倒数。在这个条件下，任意两个子载波在符号周期内的积分结果为0——也就是说，尽管子载波在频谱上有重叠，但接收端可以完美地区分每个子载波上承载的数据。这就是正交性的威力：<strong>频谱重叠但不干扰，极大地提升了频谱效率。</strong></p>
 
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="子载波正交性条件，可横向滚动">
+                <math display="block" aria-label="当子载波间隔等于符号周期倒数时，第 m 与第 n 个子载波在一个符号周期内的归一化互相关积分为零，即两两正交">
+                    <mfrac><mn>1</mn><mi>T</mi></mfrac>
+                    <msubsup><mo>∫</mo><mn>0</mn><mi>T</mi></msubsup>
+                    <msup><mi>e</mi><mrow><mi>j</mi><mn>2</mn><mi>π</mi><mi>m</mi><mi>Δ</mi><mi>f</mi><mi>t</mi></mrow></msup>
+                    <msup><mi>e</mi><mrow><mo>−</mo><mi>j</mi><mn>2</mn><mi>π</mi><mi>n</mi><mi>Δ</mi><mi>f</mi><mi>t</mi></mrow></msup>
+                    <mi>d</mi><mi>t</mi><mo>=</mo>
+                    <msub><mi>δ</mi><mrow><mi>m</mi><mi>n</mi></mrow></msub>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 δ<sub>mn</sub> 为克罗内克符号（m = n 时为 1，否则为 0）。只要取 Δf = 1/T 这个整数倍的间隔，不同子载波就两两正交，互不干扰。这解释了为什么 OFDM 能把频谱"紧贴"地堆放而不需要保护带，也解释了为什么每个子载波上都能用矩形脉冲成形——矩形脉冲的频谱是 sinc 函数，恰好在其他子载波的频点上取零。</p>
+
         <div class="tip">
             <p><strong>直观理解：</strong>想象一个合唱团，每个歌手唱不同的音调。虽然声音在空气中混合在一起，但你的耳朵（相当于接收端的FFT）可以分辨出每个歌手的声音——因为不同音调的声波是"正交"的。OFDM的原理与此类似，只不过它用的是电波而不是声波。</p>
         </div>
@@ -139,7 +154,7 @@ void ofdm_modulate(complex double *mod_symbols,   // QAM调制后的频域符号
 
         <h2>10.3 5G NR Numerology</h2>
 
-        <p>5G NR比4G LTE更灵活的地方在于：子载波间隔（Subcarrier Spacing，SCS）不是固定的15 kHz，而是可以按需选择。3GPP 38.211定义了多种Numerology（参数集），通过参数μ来索引：</p>
+        <p>5G NR比4G LTE更灵活的地方在于：子载波间隔（Subcarrier Spacing，SCS）不是固定的15 kHz，而是可以按需选择。3GPP TS 38.211 定义了多种Numerology（参数集），通过参数 μ 来索引——基础子载波间隔为 15 kHz，第 μ 个参数集的间隔是其 2<sup>μ</sup> 倍：<math display="inline" aria-label="子载波间隔等于 15 千赫兹乘以 2 的 mu 次方"><mi>Δ</mi><mi>f</mi><mo>=</mo><mn>15</mn><mtext> kHz</mtext><mo>×</mo><msup><mn>2</mn><mi>μ</mi></msup></math>。下表给出 μ = 0..4 的对应取值：</p>
 
         <table>
             <thead>
