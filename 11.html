@@ -12,6 +12,11 @@
         pre { max-width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         td, th { word-break: break-word; overflow-wrap: anywhere; }
+        .ag-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+        .ag-btn { padding: 6px 16px; border-radius: 10px; border: 1px solid #6366f1; background: #eef2ff; color: #3730a3; font-weight: 600; cursor: pointer; }
+        .ag-btn[aria-pressed="true"] { background: #6366f1; color: #fff; }
+        .ag-btn:focus-visible { outline: 3px solid #4338ca; outline-offset: 2px; }
+        #ag-out { display: inline-block; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -85,6 +90,31 @@
 
         <div class="highlight">
             <p><strong>一句话总结：</strong>Massive MIMO把无线通信从"功率受限"变成了"自由度受限"——不再是信号不够强的问题，而是空间方向够不够多的问题。这个转变深刻地影响了整个5G物理层的设计哲学。</p>
+        </div>
+
+        <p>阵列增益的物理来源是<strong>相干叠加</strong>：当 N 个阵元的信号同一相位到达目标方向时，场强相加、功率相加，阵列增益（相对单阵元）可达 N 倍，换成 dB 就是：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="阵列增益公式，可横向滚动">
+                <math display="block" aria-label="相干阵列增益的分贝值等于 10 倍以 10 为底 N 的对数，其中 N 为阵元数">
+                    <msub><mi>G</mi><mtext>array</mtext></msub><mo>=</mo>
+                    <mn>10</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>N</mi><mo>)</mo>
+                    <mtext>&nbsp;dB</mtext>
+                </math>
+            </div>
+        </div>
+
+        <p>这就是 Massive MIMO 把天线做多的直接收益：天线数翻倍，接收端信噪比升约 3 dB。下面估一下不同阵元数对应的理论阵列增益：</p>
+
+        <div class="tip" role="group" aria-labelledby="ag-label">
+            <p id="ag-label"><strong>算一算：</strong>选择阵列规模，估算相干波束赋形的理论阵列增益：</p>
+            <p class="ag-btns">
+                <button type="button" class="ag-btn" data-n="8">8 阵元</button>
+                <button type="button" class="ag-btn" data-n="32">32 阵元</button>
+                <button type="button" class="ag-btn" data-n="64">64 阵元</button>
+            </p>
+            <output id="ag-out" aria-live="polite">请选择一个阵列规模</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 G = 10log₁₀(N) 计算理想相干增益，未计入阵元互耦、损耗与波束扫描后的有效增益。</p>
         </div>
 
         <h2>11.3 波束赋形架构对比</h2>
@@ -247,5 +277,20 @@ void zf_precoding(complex double **H,      // 信道矩阵 [N_UE * N_ant]
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('ag-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.ag-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var n = parseFloat(b.getAttribute('data-n'));
+            out.textContent = n + ' 阵元：相干阵列增益 \u2248 ' + (10 * Math.log10(n)).toFixed(1) + ' dB';
+        });
+    });
+})();
+</script>
 </body>
 </html>
