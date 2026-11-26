@@ -12,6 +12,11 @@
         pre { max-width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         td, th { word-break: break-word; overflow-wrap: anywhere; }
+        .qi-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+        .qi-btn { padding: 6px 16px; border-radius: 10px; border: 1px solid #6366f1; background: #eef2ff; color: #3730a3; font-weight: 600; cursor: pointer; }
+        .qi-btn[aria-pressed="true"] { background: #6366f1; color: #fff; }
+        .qi-btn:focus-visible { outline: 3px solid #4338ca; outline-offset: 2px; }
+        #qi-out { display: inline-block; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -218,6 +223,18 @@
             </tbody>
         </table>
 
+        <div class="tip" role="group" aria-labelledby="qi-label">
+            <p id="qi-label"><strong>查一查：</strong>选择 5QI，查看它的 QoS 特性（数据取自上方表格，出处 3GPP TS 23.501）：</p>
+            <p class="qi-btns">
+                <button type="button" class="qi-btn" data-qi="1" data-type="GBR" data-pri="2" data-pdb="100ms" data-per="10⁻²" data-svc="IMS语音（VoNR）">5QI 1</button>
+                <button type="button" class="qi-btn" data-qi="6" data-type="Non-GBR" data-pri="6" data-pdb="300ms" data-per="10⁻⁶" data-svc="视频流（TCP）">5QI 6</button>
+                <button type="button" class="qi-btn" data-qi="7" data-type="Non-GBR" data-pri="7" data-pdb="100ms" data-per="10⁻³" data-svc="语音实时交互、直播">5QI 7</button>
+                <button type="button" class="qi-btn" data-qi="82" data-type="Delay-Critical GBR" data-pri="19" data-pdb="10ms" data-per="10⁻⁵" data-svc="URLLC离散自动化">5QI 82</button>
+            </p>
+            <output id="qi-out" aria-live="polite">请选择一个 5QI</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：仅列出本页表格中的几个常用标准化 5QI（TS 23.501），完整取值与默认参数以标准为准。</p>
+        </div>
+
         <div class="tip">
             <p><strong>解释一下PDB（Packet Delay Budget）：</strong>PDB不是"端到端时延"，而是"单跳时延预算"——从数据包到达UPF到它被gNB成功发送到空口之间的时间（N3+N2+空口）。实际端到端时延还需要加上应用服务器到UPF的传输时延。不过工程上经常用PDB作为时延规划的参考依据。</p>
         </div>
@@ -351,5 +368,21 @@ DRB层: gNB 将 QoS Flow 映射到 DRB（数据无线承载）
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('qi-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.qi-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var g = function (k) { return b.getAttribute('data-' + k); };
+            out.textContent = '5QI ' + g('qi') + '：' + g('type') + ' · 优先级 ' + g('pri') +
+                ' · PDB ' + g('pdb') + ' · PER ' + g('per') + ' · 典型业务：' + g('svc');
+        });
+    });
+})();
+</script>
 </body>
 </html>
