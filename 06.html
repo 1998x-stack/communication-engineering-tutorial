@@ -68,6 +68,20 @@
             <li><strong>信道容量</strong>：互信息的最大值。香农证明了：只要传输速率低于信道容量，就<strong>存在</strong>一种编码方案可以实现任意小的误码率——这就是香农第二定理，也被称为"信道编码定理"。</li>
         </ul>
 
+        <p>对于带宽为 B、信噪比为 S/N 的加性高斯白噪声（AWGN）信道，信道容量有一个简洁的上界——香农-哈特利定理：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="香农-哈特利信道容量公式，可横向滚动">
+                <math display="block" aria-label="信道容量 C 等于带宽 B 乘以 1 加信噪比 S 除以 N 之和的以二为底的对数">
+                    <mi>C</mi><mo>=</mo><mi>B</mi>
+                    <msub><mi>log</mi><mn>2</mn></msub>
+                    <mrow><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mi>S</mi><mi>N</mi></mfrac><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 C 为信道容量（bit/s），B 为信道带宽（Hz），S/N 为线性信噪比。它说明两件事：带宽和信噪比都能抬高容量，但信噪比出现在对数里——把功率翻倍远不如把带宽翻倍划算。该式出自香农 1948 年的《通信的数学理论》（Shannon, C. E., <em>A Mathematical Theory of Communication</em>, Bell System Technical Journal, 1948），是全书所有"频谱效率"讨论的出发点。</p>
+
         <div class="highlight">
             <p><strong>核心思想：</strong>信息论的一个核心洞见是——"信息"是可以被量化的。我们通常认为"信息"是抽象的、模糊的，但香农告诉我们："信息就是对不确定性的消除"。你给我发了一条微信，接收前后我的"不确定状态"发生了改变，改变量就是这条微信的信息量。这个量化观点是所有通信理论的基础。</p>
         </div>
@@ -137,6 +151,8 @@
         </table>
 
         <p>从表中可以看到一个清晰的趋势：编码方案一代比一代更接近香农极限。Turbo码在3G/4G时代"统治"了20年，LDPC码在5G数据信道中接过了接力棒，而Polar码以"首个理论上可达到香农极限"的编码方案成为了5G控制信道的标准。</p>
+
+        <p><strong>标准对应：</strong>在 5G NR 中，下行/上行共享信道（DL-SCH/UL-SCH）的数据采用 <strong>LDPC</strong> 码，广播信道 PBCH 与物理下行控制信道 PDCCH 采用 <strong>Polar</strong> 码，相应编码、速率匹配与交织流程见 3GPP TS 38.212。表中"距香农极限"一列为文献中常见的教学近似值（如 Turbo 约 0.7 dB、LDPC 约 0.1 dB），实际性能随码长、码率与译码迭代次数而变，不宜当作精确指标。</p>
 
         <figure>
         <svg role="img" aria-labelledby="fig-ber-title fig-ber-desc" viewBox="0 0 860 375" xmlns="http://www.w3.org/2000/svg">
