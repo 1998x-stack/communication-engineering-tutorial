@@ -185,6 +185,17 @@
             <li><strong>BWP（Bandwidth Part）</strong>：频域上一组连续的RB，是UE实际工作的带宽范围。一个小区可以配置多个BWP，但一个UE同一时间只在激活的BWP上工作。</li>
         </ul>
 
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="资源单元数量公式，可横向滚动">
+                <math display="block" aria-label="一个资源块在一个时隙内包含的 12 个子载波乘以 14 个正交频分复用符号，等于 168 个资源单元">
+                    <msub><mi>N</mi><mtext>RE</mtext></msub><mo>=</mo>
+                    <mn>12</mn><mo>×</mo><mn>14</mn><mo>=</mo><mn>168</mn>
+                </math>
+            </div>
+        </div>
+
+        <p>也就是说，1 个 RB 在一个时隙内共含 12 × 14 = 168 个 RE；而时隙长度随子载波间隔缩短——SCS 越大，符号越短、时隙越短（如 30 kHz 时隙为 0.5 ms）。资源网格、RB 与 RE 的确切定义见 3GPP TS 38.211 第 4.4 节（NR 物理资源）；不同参数的取值差异会在第 10 章 Numerology 中展开。</p>
+
         <p>下面是一个简化的资源分配示例：</p>
 
         <pre><code>// 5G NR PDSCH资源分配示例（频域Type 0）
