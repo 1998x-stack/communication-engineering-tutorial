@@ -12,6 +12,11 @@
         pre { max-width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         td, th { word-break: break-word; overflow-wrap: anywhere; }
+        .amc-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+        .amc-btn { padding: 6px 16px; border-radius: 10px; border: 1px solid #6366f1; background: #eef2ff; color: #3730a3; font-weight: 600; cursor: pointer; }
+        .amc-btn[aria-pressed="true"] { background: #6366f1; color: #fff; }
+        .amc-btn:focus-visible { outline: 3px solid #4338ca; outline-offset: 2px; }
+        #amc-out { display: inline-block; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -250,6 +255,18 @@
 
         <p>在5G NR中，MCS索引范围是0-31，每个索引对应一组调制方式和编码码率组合。CQI值越高，基站越"大胆"地用高阶调制；CQI低时则退回到QPSK甚至BPSK，保证连接不中断。这种动态适配机制是5G在高速移动场景（如高铁）中仍能保持连接的关键。</p>
 
+        <div class="tip" role="group" aria-labelledby="amc-label">
+            <p id="amc-label"><strong>试一试：</strong>选择一档信道质量（CQI），看基站会选什么调制方式：</p>
+            <p class="amc-btns">
+                <button type="button" class="amc-btn" data-m="QPSK" data-r="低" data-bits="2">CQI 低</button>
+                <button type="button" class="amc-btn" data-m="16QAM" data-r="中" data-bits="4">CQI 中</button>
+                <button type="button" class="amc-btn" data-m="64QAM" data-r="较高" data-bits="6">CQI 较高</button>
+                <button type="button" class="amc-btn" data-m="256QAM" data-r="高" data-bits="8">CQI 高</button>
+            </p>
+            <output id="amc-out" aria-live="polite">请选择一档信道质量</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：这里把"低/中/较高/高"CQI 简化映射到 QPSK/16QAM/64QAM/256QAM。实际 CQI→MCS 的对应关系由 3GPP TS 38.214 的 CQI 表与 MCS 表规定，且同一 MCS 的实际码率随资源分配而变。</p>
+        </div>
+
         <div class="tip">
             <p><strong>AMC vs 速率匹配：</strong>初学者容易混淆这两个概念。AMC是在不同调制编码方案之间切换，改变的是"每符号比特数"；速率匹配（Rate Matching）是在编码后通过打孔或重复来匹配可用资源——两者协同工作，共同决定最终的传输速率。AMC是"质的跳跃"，速率匹配是"量的微调"。</p>
         </div>
@@ -281,5 +298,20 @@
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('amc-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.amc-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var m = b.getAttribute('data-m');
+            out.textContent = 'CQI ' + b.getAttribute('data-r') + ' → 选择调制：' + b.getAttribute('data-m') + '（每符号 ' + b.getAttribute('data-bits') + ' 比特）';
+        });
+    });
+})();
+</script>
 </body>
 </html>
