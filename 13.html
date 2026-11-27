@@ -222,6 +222,45 @@ void harq_process_step(harq_process_t *proc, bool ack_received) {
     }
 }</code></pre>
 
+        <p>重传到底“赚”了多少？软合并的本质是把多次接收到的软比特在<strong>对数似然比域相加</strong>，Chase Combining（每次传相同编码比特）下等效于信噪比的线性累加：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Chase 合并信噪比公式，可横向滚动">
+                <math display="block" aria-label="合并后的信噪比等于名次传输信噪比之和，等功率下为单次信噪比的 m 倍">
+                    <msub><mi>&#947;</mi><mi>comb</mi></msub><mo>=</mo>
+                    <munderover><mo>&#8721;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover>
+                    <msub><mi>&#947;</mi><mi>i</mi></msub>
+                    <mspace width="1.5em"></mspace>
+                    <mtext>&#8658;</mtext><mspace width="0.6em"></mspace>
+                    <mn>10</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>m</mi><mo>)</mo><mtext>&nbsp;dB</mtext>
+                </math>
+            </div>
+        </div>
+
+        <p>而重传会占用时频资源，因此衡量“净”效率要看把误块和重传都算进去后的<strong>有效频谱效率</strong>（BLER 为首次传输误块率，R 为码率）：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="有效频谱效率公式，可横向滚动">
+                <math display="block" aria-label="有效频谱效率等于码率乘以 1 减误块率">
+                    <mi>&#951;</mi><mo>=</mo><mi>R</mi><mo>&#8290;</mo><mo>(</mo><mn>1</mn><mo>&#8722;</mo><mtext>BLER</mtext><mo>)</mo>
+                </math>
+            </div>
+        </div>
+
+        <p>下面选不同的传输次数 m，看看理想 Chase 合并带来的 SNR 增益有多大：</p>
+
+        <div class="tip" role="group" aria-labelledby="harq-label">
+            <p id="harq-label"><strong>算一算：</strong>选择合并的传输次数 m，估算 SNR 合并增益：</p>
+            <p class="harq-btns">
+                <button type="button" class="harq-btn" data-m="1">m = 1</button>
+                <button type="button" class="harq-btn" data-m="2">m = 2</button>
+                <button type="button" class="harq-btn" data-m="3">m = 3</button>
+                <button type="button" class="harq-btn" data-m="4">m = 4</button>
+            </p>
+            <output id="harq-out" aria-live="polite">请选择合并的传输次数</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按等功率 Chase 合并 γ_comb = Σγ_i 估算，10·log₁₀(m) 为理论上界；增量冗余（IR）的增益通常高于同次数的 Chase 合并，且受软缓冲大小与信道相关性影响。</p>
+        </div>
+
         <h2>13.4 逻辑信道与传输信道映射</h2>
 
         <p>5G NR定义了多种逻辑信道，根据承载的业务类型不同，它们映射到不同的传输信道和物理信道：</p>
@@ -344,5 +383,21 @@ void harq_process_step(harq_process_t *proc, bool ack_received) {
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('harq-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.harq-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var m = parseFloat(b.getAttribute('data-m'));
+            var gain = 10 * Math.log10(m);
+            out.textContent = '合并 ' + m + ' 次：Chase 合并 SNR 增益 \u2248 ' + gain.toFixed(1) + ' dB';
+        });
+    });
+})();
+</script>
 </body>
 </html>
