@@ -150,6 +150,19 @@
 
         <p>5G-AKA相比4G最大的改进是<strong>前向安全性</strong>——如果攻击者获取了当前会话密钥，也无法推算出之前的会话密钥。这是通过引入KAUSF（锚点密钥）和更复杂的密钥派生树实现的。</p>
 
+        <p>这套密钥派生树的每一级都由同一个基于 HMAC-SHA-256 的<strong>密钥派生函数（KDF）</strong>生成：以上一级密钥 K 为 HMAC 密钥、以一个区分用途的字符串 S（含计数器）为输入，输出固定 256 位的新密钥：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="密钥派生函数定义式，可横向滚动">
+                <math display="block" aria-label="密钥派生函数 KDF 以密钥 K 和字符串 S 为输入，等于 HMAC-SHA-256 的输出">
+                    <mtext>KDF</mtext><mo>(</mo><mi>K</mi><mo>,</mo><mi>S</mi><mo>)</mo><mo>=</mo>
+                    <mtext>HMAC-SHA-256</mtext><mo>(</mo><mi>K</mi><mo>,</mo><mi>S</mi><mo>)</mo>
+                </math>
+            </div>
+        </div>
+
+        <p>因为每一级密钥都只由上一条链路上不可逆的 HMAC 推出，拿到中间某一级密钥也无法反推上一级——这就是前向安全性的数学根源（KDF 的定义与密钥层级见 3GPP TS 33.501）。</p>
+
         <h3>EAP-TLS（可扩展认证协议-传输层安全）</h3>
 
         <p>这是5G新增的认证方式，主要面向行业专网和企业客户。EAP-TLS使用数字证书（X.509）代替SIM卡进行认证，企业员工可以用公司颁发的证书接入5G专网，而不需要更换SIM卡。这对于将5G集成到现有企业IAM（身份和访问管理）体系中非常有价值。</p>
