@@ -182,6 +182,33 @@
 
         <p>从这个模型可以看出，通信系统的设计本质上是在<strong>可靠性和效率之间做权衡</strong>：信源编码追求压缩率（去掉冗余），信道编码追求可靠性（加入冗余），两者互相制约。这就是为什么通信工程师需要同时懂信号处理、信息论和电磁场理论——你面对的是一个多目标优化问题。</p>
 
+        <h3>效率的物理上限：香农公式</h3>
+
+        <p>这种权衡并非可以无限地"两全"——它有一条硬性的物理边界。香农在1948年证明：只要传输速率低于<strong>信道容量</strong>，就存在某种编码让误码率任意小；而一旦超过容量，再聪明的工程手段也无法保证可靠传输。对于带宽为 B、线性信噪比为 S/N 的加性高斯白噪声（AWGN）信道，这条边界由香农公式给出：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="香农信道容量公式，可横向滚动">
+                <math display="block" aria-label="信道容量 C 等于带宽 B 乘以 1 加信噪比 S 除以 N 之和的以二为底的对数">
+                    <mi>C</mi><mo>=</mo><mi>B</mi>
+                    <msub><mi>log</mi><mn>2</mn></msub>
+                    <mrow><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mi>S</mi><mi>N</mi></mfrac><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 C 为信道容量（bit/s），B 为信道带宽（Hz），S/N 为线性信噪比。该式出自香农 1948 年的《通信的数学理论》（Shannon, C. E., <em>A Mathematical Theory of Communication</em>, Bell System Technical Journal, 1948），它直接解释了前文表格里"带宽越宽、速率越高"的成因。注意信噪比落在对数里：把发射功率翻倍，容量只增加约 1 bit/s/Hz 的边际量——<strong>扩带宽通常比堆功率更划算</strong>，这也是 5G 普遍走向 100 MHz 大带宽与毫米波的原因。</p>
+
+        <div class="tip" role="group" aria-labelledby="cap-label">
+            <p id="cap-label"><strong>算一算：</strong>选一种典型配置，用香农公式估算理论信道容量：</p>
+            <p>
+                <button type="button" class="cap-btn" data-b="20" data-snr="20">LTE 20 MHz / SNR 20 dB</button>
+                <button type="button" class="cap-btn" data-b="100" data-snr="15">5G 100 MHz / SNR 15 dB</button>
+                <button type="button" class="cap-btn" data-b="400" data-snr="10">mmWave 400 MHz / SNR 10 dB</button>
+            </p>
+            <output id="cap-out" aria-live="polite">请选择一种配置</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 C=B·log₂(1+S/N) 代入估算，未计入编码、调制阶数、开销与信道估计误差；实际峰值速率显著低于该上界。</p>
+        </div>
+
         <h2>1.3 移动通信代际演进：1G→6G</h2>
 
         <p>移动通信大约每十年更新一代，每一代都带来了量级的性能跃升和应用场景的革命。下面这张表清晰地展示了每一代的核心特征：</p>
@@ -334,5 +361,25 @@
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('cap-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.cap-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var bwMHz = parseFloat(b.getAttribute('data-b'));
+            var snrDb = parseFloat(b.getAttribute('data-snr'));
+            var snr = Math.pow(10, snrDb / 10);
+            var cap = bwMHz * 1e6 * Math.log2(1 + snr);
+            out.textContent = 'B = ' + bwMHz + ' MHz，SNR = ' + snrDb +
+                ' dB：理论容量 \u2248 ' + (cap / 1e9).toFixed(2) + ' Gbps（频谱效率 ' +
+                Math.log2(1 + snr).toFixed(1) + ' bit/s/Hz）';
+        });
+    });
+})();
+</script>
 </body>
 </html>
