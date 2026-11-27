@@ -186,6 +186,45 @@
             <p><strong>一个UPF下沉的小知识：</strong>传统的4G核心网里，全网的SGW/PGW都集中在省会机房。到了5G，UPF可以像"分布式基站"一样被部署到乡镇级别的机房。某运营商在沿海省份部署了超过200个边缘UPF，最远的到了海岛上的无人基站——UPF和基站之间用微波拉远，工程师坐船上岛调试，场景堪比"荒野求生"。</p>
         </div>
 
+        <p>不管 UPF 下沉到哪一级，端到端时延都可以分解成几段相加，短板的那个环节才是真正的瓶颈：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="端到端时延分解公式，可横向滚动">
+                <math display="block" aria-label="端到端时延等于空口时延加接入网时延加传输时延加 MEC 处理时延">
+                    <msub><mi>T</mi><mi>e2e</mi></msub><mo>=</mo>
+                    <msub><mi>T</mi><mi>air</mi></msub><mo>+</mo>
+                    <msub><mi>T</mi><mi>ran</mi></msub><mo>+</mo>
+                    <msub><mi>T</mi><mi>trans</mi></msub><mo>+</mo>
+                    <msub><mi>T</mi><mi>mec</mi></msub>
+                </math>
+            </div>
+        </div>
+
+        <p>其中传输段时延主要来自信号在光纤中的传播，其单程时延正比于距离：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="传播时延公式，可横向滚动">
+                <math display="block" aria-label="单程传播时延等于距离除以光纤中的光速，约每秒二亿米">
+                    <msub><mi>T</mi><mi>prop</mi></msub><mo>=</mo><mfrac><mi>d</mi><mi>v</mi></mfrac>
+                    <mtext>,&nbsp;</mtext><mi>v</mi><mo>&#8776;</mo><mn>2.0</mn><mo>&#215;</mo><msup><mn>10</mn><mn>8</mn></msup><mtext>&nbsp;m/s</mtext>
+                </math>
+            </div>
+        </div>
+
+        <p>可见 UPF 每下沉一级，d 变小，T_prop 就成比例下降。下面选不同的分流距离，估一估光纤传播带来的往返时延：</p>
+
+        <div class="tip" role="group" aria-labelledby="mec-label">
+            <p id="mec-label"><strong>算一算：</strong>选择业务到 UPF/MEC 的单向距离 d，估算传播时延：</p>
+            <p class="mec-btns">
+                <button type="button" class="mec-btn" data-d="1">d = 1 km</button>
+                <button type="button" class="mec-btn" data-d="10">d = 10 km</button>
+                <button type="button" class="mec-btn" data-d="50">d = 50 km</button>
+                <button type="button" class="mec-btn" data-d="200">d = 200 km</button>
+            </p>
+            <output id="mec-out" aria-live="polite">请选择一个分流距离</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按光纤中光速 v ≈ 2.0×10⁶ km/s（折射率约 1.5）估算纯传播时延 d/v，往返取 2 倍；实际时延还需叠加交换/路由转发与协议处理开销。</p>
+        </div>
+
         <h2>20.4 典型应用场景</h2>
 
         <p>MEC与5G网络切片结合，可以支撑极其丰富的行业应用：</p>
@@ -317,5 +356,23 @@ upf:
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var v = 2.0e8;
+    var out = document.getElementById('mec-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.mec-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var d = parseFloat(b.getAttribute('data-d')) * 1000;
+            var oneWay = (d / v) * 1000;
+            out.textContent = 'd = ' + (d / 1000) + ' km：单程 T_prop \u2248 ' + oneWay.toFixed(2) +
+                ' ms，往返 \u2248 ' + (2 * oneWay).toFixed(2) + ' ms';
+        });
+    });
+})();
+</script>
 </body>
 </html>
