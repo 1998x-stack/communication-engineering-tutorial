@@ -230,6 +230,33 @@ ng-interface
     &lt;p0Nominal&gt;-90&lt;/p0Nominal&gt;      &lt;!-- 标称接收功率 --&gt;
 &lt;/NRCellConfig&gt;</code></pre>
 
+        <h3>PRACH 根序列规划：64 个前导码从哪来</h3>
+
+        <p>随机接入前导码（Preamble）由 Zadoff-Chu 序列循环移位生成。NR 长前导码的 ZC 序列长度固定为 N_ZC=839（3GPP TS 38.211 §6.3.3.1），而每个小区需要提供 64 个前导码。循环移位量 N_CS 越大，抗时延扩展能力越强（可支持更大的小区半径），但单个根序列能提供的前导码越少：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="PRACH 根序列前导码数公式，可横向滚动">
+                <math display="block" aria-label="每个根序列可生成的前导码数 P 等于 ZC 序列长度 N_ZC 除以循环移位 N_CS 向下取整">
+                    <mi>P</mi><mo>=</mo><mrow><mo>&#8970;</mo><mfrac><msub><mi>N</mi><mi>ZC</mi></msub><msub><mi>N</mi><mi>CS</mi></msub></mfrac><mo>&#8971;</mo></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 P 为单个根序列可产生的前导码数。小区共需 64 个前导码，因此需要的根序列数为 N_root = ⌈64 / P⌉。N_CS 由参数 zeroCorrelationZoneConfig 决定，规划时按目标小区半径选取：N_CS 越大支持的小区越大，但消耗的根序列越多。选一个 N_CS 看看：</p>
+
+        <div class="tip" role="group" aria-labelledby="prach-label">
+            <p id="prach-label"><strong>算一算：</strong>N_ZC=839、目标 64 个前导码，选一个循环移位量 N_CS：</p>
+            <p>
+                <button type="button" class="prach-btn" data-ncs="13">N_CS = 13</button>
+                <button type="button" class="prach-btn" data-ncs="26">N_CS = 26</button>
+                <button type="button" class="prach-btn" data-ncs="46">N_CS = 46</button>
+                <button type="button" class="prach-btn" data-ncs="59">N_CS = 59</button>
+                <button type="button" class="prach-btn" data-ncs="119">N_CS = 119</button>
+            </p>
+            <output id="prach-out" aria-live="polite">请选择一个 N_CS</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 P=⌊N_ZC/N_CS⌋、N_root=⌈64/P⌉ 估算，N_CS 取 3GPP TS 38.211 非限制集典型值；实际规划还需按相邻小区根序列复用、高速场景限制集等因素调整。</p>
+        </div>
+
         <h2>17.5 邻区配置</h2>
 
         <p>一个基站不能孤立存在。邻区关系定义了UE在本小区信号变差时应该尝试切换的小区。邻区配置遗漏或错误，是导致掉话和切换失败的常见原因。</p>
@@ -316,5 +343,24 @@ ng-interface
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('prach-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.prach-btn'));
+    if (!out || !btns.length) return;
+    var NZC = 839, TARGET = 64;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var ncs = parseFloat(b.getAttribute('data-ncs'));
+            var p = Math.floor(NZC / ncs);
+            var roots = Math.ceil(TARGET / p);
+            out.textContent = 'N_CS = ' + ncs + '：每根序列 \u2248 ' + p +
+                ' 个前导码，凑足 64 个需 ' + roots + ' 个根序列';
+        });
+    });
+})();
+</script>
 </body>
 </html>
