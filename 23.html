@@ -229,7 +229,34 @@ rxBits = nrPDSCHDecode(carrier, pdsch, rxSymbols, ...
 ber = sum(decBits ~= trBlk) / length(trBlk);
 disp(['BER @ ' num2str(SNRdB) ' dB SNR: ' num2str(ber, '%.2e')]);</code></pre>
 
-        <p>整个链路仿真的核心逻辑可以用一句话概括：<strong>你不知道信道里发生了什么，所以必须用冗余编码和信道估计来"猜"回去</strong>。而仿真的意义就在于——你能在完全受控的条件下反复测试这个"猜"的成功率，并针对性地优化系统参数。</p>
+        <p>整个链路仿真的核心逻辑可以用一句话概括:<strong>你不知道信道里发生了什么,所以必须用冗余编码和信道估计来"猜"回去</strong>。而仿真的意义就在于——你能在完全受控的条件下反复测试这个“猜”的成功率，并针对性地优化系统参数。</p>
+
+        <h3>理论基线：QPSK 在 AWGN 下的误码率</h3>
+
+        <p>跑仿真时，我们总需要一个理论值来校对曲线。对 QPSK 相干解调、AWGN 信道这一经典情形，误码率有一个闭式解：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="QPSK 误码率公式，可横向滚动">
+                <math display="block" aria-label="QPSK 相干解调误码率 P_b 等于 Q 函数作用于根号下两倍 Eb 除以 N0">
+                    <msub><mi>P</mi><mi>b</mi></msub><mo>=</mo><mi>Q</mi>
+                    <mrow><mo>(</mo><msqrt><mfrac><mrow><mn>2</mn><msub><mi>E</mi><mi>b</mi></msub></mrow><msub><mi>N</mi><mn>0</mn></msub></mfrac></msqrt><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 E_b/N_0 为每比特信噪比（dB 形式即 E_b/N_0 的对数十倍），Q(x) 为标准正态分布的尾概率，即 Q(x) = (1/√(2π))∫<sub>x</sub><sup>∞</sup> e^(−t²/2) dt。它给出一条理论基线：只要把仿真得到的 BER 点叠上去，就能看出编码增益到底拿了多少。选一个 E_b/N_0 对一下：</p>
+
+        <div class="tip" role="group" aria-labelledby="ber-label">
+            <p id="ber-label"><strong>算一算：</strong>选一个每比特信噪比 E_b/N_0，估算 QPSK 的理论误码率：</p>
+            <p>
+                <button type="button" class="ber-btn" data-snr="0">E_b/N_0 = 0 dB</button>
+                <button type="button" class="ber-btn" data-snr="3">E_b/N_0 = 3 dB</button>
+                <button type="button" class="ber-btn" data-snr="6">E_b/N_0 = 6 dB</button>
+                <button type="button" class="ber-btn" data-snr="9">E_b/N_0 = 9 dB</button>
+            </p>
+            <output id="ber-out" aria-live="polite">请选择一个信噪比</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按理想 AWGN、无编码、相干检测的 P_b=Q(√(2E_b/N_0)) 估算；Q(x) 用 Abramowitz &amp; Stegun 26.2.17 的近似式计算，未计入信道估计误差、相位噪声与 TDL 多径。</p>
+        </div>
 
         <h3>BER vs SNR曲线绘制</h3>
 
@@ -351,5 +378,30 @@ legend('16QAM @ TDL-A');</code></pre>
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('ber-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.ber-btn'));
+    if (!out || !btns.length) return;
+    /* Abramowitz & Stegun 26.2.17: 标准正态尾概率 Q(x) */
+    function Q(x) {
+        var b = [0.319381530, -0.356563782, 1.781477937, -1.821255978, 1.330274429];
+        var t = 1 / (1 + 0.2316419 * x);
+        var phi = Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI);
+        var poly = b[0] * t + b[1] * t * t + b[2] * Math.pow(t, 3) + b[3] * Math.pow(t, 4) + b[4] * Math.pow(t, 5);
+        return phi * poly;
+    }
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var snrDb = parseFloat(b.getAttribute('data-snr'));
+            var ebno = Math.pow(10, snrDb / 10);
+            var ber = Q(Math.sqrt(2 * ebno));
+            out.textContent = 'E_b/N_0 = ' + snrDb + ' dB：QPSK 理论误码率 \u2248 ' + ber.toExponential(2);
+        });
+    });
+})();
+</script>
 </body>
 </html>
