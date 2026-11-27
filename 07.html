@@ -115,6 +115,38 @@
         <figcaption><strong>图 7-1</strong> N=7 频率复用：每 7 个小区为一簇，簇内 F1–F7 互不重复；相隔一个复用距离后同一频点可再次使用（右侧虚线 F1）。复用距离 D≈√(3N)·R 随复用因子 N 增大而增大，同频干扰也随之降低，代价是每小区可用带宽缩小。图中半径与间距为教学示意。</figcaption>
         </figure>
 
+        <p>上面的 N=7 只是经典举例，复用因子并不唯一。凡是能写成 <strong>N = i² + ij + j²</strong>（i、j 为非负整数）的整数，都能拼出无缝的六边形复用簇，得到合法的复用因子：1、3、4、7、9、12、13、16、19……。选定 N 后，同一频点相邻两簇小区的中心间距——<strong>复用距离</strong> D——与小区半径 R 之间存在确定关系：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="簇大小公式，可横向滚动">
+                <math display="block" aria-label="簇大小 N 等于 i 平方加 i 乘 j 加 j 平方，i 和 j 为非负整数">
+                    <mi>N</mi><mo>=</mo><msup><mi>i</mi><mn>2</mn></msup><mo>+</mo><mi>i</mi><mi>j</mi><mo>+</mo><msup><mi>j</mi><mn>2</mn></msup>
+                </math>
+            </div>
+        </div>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="同频复用比公式，可横向滚动">
+                <math display="block" aria-label="同频复用比 Q 等于复用距离 D 除以小区半径 R，等于根号下三倍簇大小 N">
+                    <mi>Q</mi><mo>=</mo><mfrac><mi>D</mi><mi>R</mi></mfrac><mo>=</mo><msqrt><mn>3</mn><mi>N</mi></msqrt>
+                </math>
+            </div>
+        </div>
+
+        <p>Q=D/R 称为<strong>同频复用比</strong>：Q 越大，同频小区离得越远、干扰越小，但一簇内要摊分更多频点，每小区的可用带宽就越窄——这正是频率复用的核心权衡。下面选几个合法复用因子，算一算对应的 D/R 与每小区频谱占比：</p>
+
+        <div class="tip" role="group" aria-labelledby="fr-label">
+            <p id="fr-label"><strong>算一算：</strong>选择复用因子 N，估算同频复用比与每小区可用频谱：</p>
+            <p class="fr-btns">
+                <button type="button" class="fr-btn" data-n="3">N = 3</button>
+                <button type="button" class="fr-btn" data-n="7">N = 7</button>
+                <button type="button" class="fr-btn" data-n="12">N = 12</button>
+                <button type="button" class="fr-btn" data-n="19">N = 19</button>
+            </p>
+            <output id="fr-out" aria-live="polite">请选择一个复用因子</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 Q=√(3N) 计算理论同频复用比，每小区频谱占比取 1/N；实际干扰还取决于天线方向图、下倾角、站址高度与功控策略。</p>
+        </div>
+
         <h2>7.2 2G GSM：电路交换的黄金时代</h2>
 
         <p>GSM（全球移动通信系统）是2G时代的代表，也是第一个真正意义上的全球统一数字移动通信标准。它的网络架构由三部分组成：</p>
@@ -309,5 +341,23 @@
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('fr-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.fr-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var n = parseFloat(b.getAttribute('data-n'));
+            var q = Math.sqrt(3 * n);
+            var pct = (100 / n).toFixed(1);
+            out.textContent = 'N = ' + n + '：同频复用比 Q = D/R \u2248 ' + q.toFixed(2) +
+                '，每小区可用频谱 \u2248 ' + pct + '%';
+        });
+    });
+})();
+</script>
 </body>
 </html>
