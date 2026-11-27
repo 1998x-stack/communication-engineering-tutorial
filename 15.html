@@ -239,6 +239,30 @@ Slot 7:  空载  — 预留
             </tbody>
         </table>
 
+        <p>为什么5G会从CPRI转向eCPRI？根本原因是天线通道变多，前传带宽不够用了。CPRI直接把物理层采样后的 I/Q 数据送到基带，所需带宽可以用下面的关系式估算：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="CPRI 线路速率公式，可横向滚动">
+                <math display="block" aria-label="CPRI 线路速率等于过采样倍数乘以两倍采样位宽乘以天线载波数乘以采样率，再乘控制字开销十六分之十五和 8b10b 编码开销十分之八">
+                    <mi>R</mi><mo>=</mo><mi>S</mi><mo>&#215;</mo><mn>2</mn><mo>&#215;</mo><mi>W</mi><mo>&#215;</mo><mi>C</mi><mo>&#215;</mo><msub><mi>f</mi><mi>s</mi></msub>
+                    <mo>&#215;</mo><mfrac><mn>16</mn><mn>15</mn></mfrac><mo>&#215;</mo><mfrac><mn>10</mn><mn>8</mn></mfrac>
+                </math>
+            </div>
+        </div>
+
+        <p>其中 S 为过采样倍数，W 为每采样位宽，C 为天线载波（AxC）流数，f_s 为采样率，16/15 为控制字开销，10/8 为 8b/10b 线路编码开销。用 20 MHz LTE、2 流、W=15、f_s=30.72 MHz 代入，恰好得到 2.4576 Gbps，正是 CPRI Option 3 的标准速率。天线流数一多，带宽就爆了——选一下看看：</p>
+
+        <div class="tip" role="group" aria-labelledby="cpri-label">
+            <p id="cpri-label"><strong>算一算：</strong>选天线载波流数 C，估算 100 MHz NR 载波所需 CPRI 速率：</p>
+            <p class="cpri-btns">
+                <button type="button" class="cpri-btn" data-c="2">C = 2</button>
+                <button type="button" class="cpri-btn" data-c="4">C = 4</button>
+                <button type="button" class="cpri-btn" data-c="8">C = 8</button>
+            </p>
+            <output id="cpri-out" aria-live="polite">请选择天线载波流数</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 100 MHz 载波 f_s=122.88 MHz、W=16、S=1 代入 R=S·2·W·C·f_s·(16/15)·(10/8) 估算；实际 eCPRI 采用分组传输，带宽开销与具体功能切分选项有关。</p>
+        </div>
+
         <h2>15.5 天馈系统</h2>
 
         <p>天馈系统是将射频信号转换为电磁波辐射出去的"最后一公里"。天线虽然看起来只是一根"棍子"或一块"板子"，但它的性能参数直接影响整站的覆盖和容量。</p>
@@ -287,5 +311,23 @@ Slot 7:  空载  — 预留
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var fs = 122.88e6, W = 16, S = 1;
+    var out = document.getElementById('cpri-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.cpri-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var c = parseFloat(b.getAttribute('data-c'));
+            var r = S * 2 * W * c * fs * (16 / 15) * (10 / 8) / 1e9;
+            out.textContent = 'C = ' + c + '：所需 CPRI 速率 \u2248 ' + r.toFixed(2) +
+                ' Gbps' + (r > 10.1 ? '（超过 CPRI Option 10 的 10.1 Gbps，需转向 eCPRI）' : '');
+        });
+    });
+})();
+</script>
 </body>
 </html>
