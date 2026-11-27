@@ -186,6 +186,33 @@
 
         <p>影响EVM的因素很多：相位噪声（本振不够干净）、功放非线性、IQ不平衡、采样时钟抖动等。通过分析EVM在不同RB位置、不同符号之间的变化趋势，可以反向推断出问题根源。</p>
 
+        <p>EVM 的严格定义是“误差矢量均方根与参考矢量均方根之比”，用百分比或分贝表示（|E| 为矢量幅度，N 为采样点数）：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="EVM 定义式，可横向滚动">
+                <math display="block" aria-label="EVM 等于误差矢量均方根除以参考矢量均方根，可用分贝表示">
+                    <mtext>EVM</mtext><mo>=</mo>
+                    <msqrt><mfrac><mrow><munderover><mo>&#8721;</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msup><mrow><mo>|</mo><msub><mi>E</mi><mi>err</mi></msub><mo>|</mo></mrow><mn>2</mn></msup></mrow><mrow><munderover><mo>&#8721;</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msup><mrow><mo>|</mo><msub><mi>E</mi><mi>ref</mi></msub><mo>|</mo></mrow><mn>2</mn></msup></mrow></mfrac></msqrt>
+                    <mtext>,&nbsp;</mtext>
+                    <msub><mtext>EVM</mtext><mi>dB</mi></msub><mo>=</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mtext>EVM</mtext><mo>)</mo>
+                </math>
+            </div>
+        </div>
+
+        <p>把上表的 3GPP 门限反过来用，就能从实测 EVM 判断当前链路还“开得起”多高的调制阶数。选一个 EVM 值试试：</p>
+
+        <div class="tip" role="group" aria-labelledby="evm-label">
+            <p id="evm-label"><strong>算一算：</strong>选择实测 EVM（RMS），看它满足哪一档调制要求：</p>
+            <p class="evm-btns">
+                <button type="button" class="evm-btn" data-evm="17">EVM = 17%</button>
+                <button type="button" class="evm-btn" data-evm="12">EVM = 12%</button>
+                <button type="button" class="evm-btn" data-evm="8">EVM = 8%</button>
+                <button type="button" class="evm-btn" data-evm="3">EVM = 3%</button>
+            </p>
+            <output id="evm-out" aria-live="polite">请选择一个 EVM 值</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">出处：调制阶数与 EVM 门限对照采用本页上表所列的 3GPP TS 38.104 EVM 要求（QPSK≤17.5%、16QAM≤12.5%、64QAM≤8.0%、256QAM≤3.5%）；这里按“满足某档即取该档”简化判定。</p>
+        </div>
+
         <h2>25.4 网络综测仪</h2>
 
         <p>网络综测仪（如R&S CMX500、Keysight UXM 5G）是"一体化的基站/终端测试解决方案"——它把信号源、信号分析仪、协议测试仪、IP数据测试仪全部集成在一个机箱里，配合专用的测试软件（如R&S TS-8980、Keysight S8705A）自动完成3GPP一致性测试用例。</p>
@@ -330,5 +357,26 @@ VSWR ≥ 2.0  → FAIL （反射功率 > 11%, 应立即处理）</code></pre>
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('evm-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.evm-btn'));
+    if (!out || !btns.length) return;
+    var tiers = [[17.5, 'QPSK'], [12.5, '16QAM'], [8.0, '64QAM'], [3.5, '256QAM']];
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var e = parseFloat(b.getAttribute('data-evm'));
+            var mod = '低于所有档位';
+            for (var i = 0; i < tiers.length; i++) {
+                if (e <= tiers[i][0]) { mod = tiers[i][1]; break; }
+            }
+            var db = 20 * Math.log10(e / 100);
+            out.textContent = 'EVM = ' + e + '%（' + db.toFixed(1) + ' dB）：按 3GPP TS 38.104 可支持的最高调制为 ' + mod;
+        });
+    });
+})();
+</script>
 </body>
 </html>
