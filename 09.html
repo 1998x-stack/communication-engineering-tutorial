@@ -160,6 +160,34 @@
 
         <p>F1接口的设计允许一个CU管理数百个DU，也允许一个DU同时连接到多个CU（用于灾备）。CU和DU之间的传输网络可以是IP专线、MPLS VPN甚至微波，只要满足时延和带宽要求即可。</p>
 
+        <p>F1接口对时延有硬性要求。可以用一个简单的预算式把这一段的单向时延拆开（传播、传输节点转发、两端处理各占一部分）：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="F1 单向时延预算公式，可横向滚动">
+                <math display="block" aria-label="F1 单向时延等于传播时延加传输节点转发时延加两端处理时延，应不大于十毫秒">
+                    <msub><mi>T</mi><mtext>F1</mtext></msub><mo>=</mo>
+                    <msub><mi>T</mi><mtext>prop</mtext></msub><mo>+</mo>
+                    <msub><mi>T</mi><mtext>trans</mtext></msub><mo>+</mo>
+                    <msub><mi>T</mi><mtext>proc</mtext></msub>
+                    <mo>&#8804;</mo><mn>10</mn><mtext>&nbsp;ms</mtext>
+                </math>
+            </div>
+        </div>
+
+        <p>一旦传输网跳数过多或 QoS 排队不当，T_trans 就会被抬高，整个预算超标（本节 9.7 的 35 ms 往返就是一个典型）。估一下不同单向时延是否满足要求：</p>
+
+        <div class="tip" role="group" aria-labelledby="f1-label">
+            <p id="f1-label"><strong>算一算：</strong>选择 F1 单向时延实测值，对照 10 ms 要求：</p>
+            <p class="f1-btns">
+                <button type="button" class="f1-btn" data-t="2">2 ms</button>
+                <button type="button" class="f1-btn" data-t="8">8 ms</button>
+                <button type="button" class="f1-btn" data-t="15">15 ms</button>
+                <button type="button" class="f1-btn" data-t="19">19 ms</button>
+            </p>
+            <output id="f1-out" aria-live="polite">请选择一个单向时延</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：门限 10 ms（F1-C 单向）引用本页 9.7 节给出的 3GPP 要求；实际验收还需结合具体功能切分选项与传输网络配置。</p>
+        </div>
+
         <h2>9.4 Xn接口：gNB之间的"握手"</h2>
 
         <p>当用户从一个基站移动到另一个基站时，两个gNB之间需要通过Xn接口交互信息。Xn接口也分为控制面（Xn-C，基于SCTP）和用户面（Xn-U，基于GTP-U）。Xn接口的主要用途包括：</p>
@@ -230,5 +258,22 @@ rtt min/avg/max/mdev = 2.145/5.678/38.234/4.123 ms
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('f1-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.f1-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var t = parseFloat(b.getAttribute('data-t'));
+            var ok = t <= 10;
+            out.textContent = 'F1 单向时延 ' + t + ' ms：' +
+                (ok ? '满足 ≤10 ms 要求' : '超过 ≤10 ms 要求，需检查传输跳数与 QoS 策略');
+        });
+    });
+})();
+</script>
 </body>
 </html>
