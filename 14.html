@@ -137,6 +137,32 @@
 
         <p>CBRA的四步流程：Msg1（UE发送Preamble）→ Msg2（gNB回复Random Access Response，包含TA和UL Grant）→ Msg3（UE发送RRC Setup Request）→ Msg4（gNB回复RRC Setup，包含UE Contention Resolution ID）。CFRA的两步流程：MsgA（UE发送Preamble + 数据）→ MsgB（gNB回复成功确认或回退指示）。</p>
 
+        <h3>定时提前：一次往返时间的补偿</h3>
+
+        <p>Msg2 中一个关键字段是定时提前（Timing Advance, TA）。UE 离基站越远，信号往返时间越长；若不做补偿，远处 UE 的上行信号会落在错误的时隙上，与相邻 UE 互相干扰。TA 的作用就是让 UE“提前”发送，把上行信号对齐到基站接收时隙。忽略设备处理时延，TA 对应一个纯几何往返时间：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="定时提前与距离的往返时间关系式，可横向滚动">
+                <math display="block" aria-label="定时提前 t_TA 等于两倍距离 d 除以光速 c">
+                    <msub><mi>t</mi><mi>TA</mi></msub><mo>=</mo><mfrac><mrow><mn>2</mn><mi>d</mi></mrow><mi>c</mi></mfrac>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 d 为 UE 到基站的距离（m），c 为光速（约 3×10⁸ m/s）。每 1 km 距离带来约 6.67 μs 的往返时延——这就是 NR 把 TA 作为 Msg2 必选字段、并按时序粒度下发的原因。算一下不同距离下需要多大的提前量：</p>
+
+        <div class="tip" role="group" aria-labelledby="ta-label">
+            <p id="ta-label"><strong>算一算：</strong>选一个 UE 到基站的距离，估算所需定时提前量：</p>
+            <p>
+                <button type="button" class="ta-btn" data-d="0.5">距离 0.5 km</button>
+                <button type="button" class="ta-btn" data-d="1">距离 1 km</button>
+                <button type="button" class="ta-btn" data-d="5">距离 5 km</button>
+                <button type="button" class="ta-btn" data-d="20">距离 20 km</button>
+            </p>
+            <output id="ta-out" aria-live="polite">请选择一个距离</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 t_TA=2d/c 估算纯传播往返时延，未计入设备处理时延与 TA 量化取整；大区覆盖还受前导码保护间隔（CP）长度约束。</p>
+        </div>
+
         <figure>
         <svg role="img" aria-labelledby="fig-ra-title fig-ra-desc" viewBox="0 0 860 365" xmlns="http://www.w3.org/2000/svg">
             <title id="fig-ra-title">CBRA 四步随机接入信令时序图</title>
@@ -241,5 +267,22 @@
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('ta-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.ta-btn'));
+    if (!out || !btns.length) return;
+    var c = 3e8; /* m/s */
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var d = parseFloat(b.getAttribute('data-d')); /* km */
+            var t = 2 * d * 1000 / c * 1e6; /* \u03bcs */
+            out.textContent = '距离 ' + d + ' km：所需定时提前量 t_TA \u2248 ' + t.toFixed(2) + ' \u03bcs';
+        });
+    });
+})();
+</script>
 </body>
 </html>
