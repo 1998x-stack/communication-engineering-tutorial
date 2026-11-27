@@ -131,6 +131,32 @@
             </tbody>
         </table>
 
+        <h3>下倾角与覆盖距离：一个几何关系</h3>
+
+        <p>下倾角之所以能“调覆盖”，背后只是一个简单的几何关系：天线挂高 h、主波束俯角 θ 与地面覆盖距离 D 构成一个直角三角形。忽略波束宽度与地形起伏，主波束落地距离可由下式估算：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="覆盖距离与下倾角的几何关系式，可横向滚动">
+                <math display="block" aria-label="覆盖距离 D 等于天线挂高 h 除以俯角 theta 的正切">
+                    <mi>D</mi><mo>=</mo><mfrac><mi>h</mi><mrow><mi>tan</mi><mi>&#952;</mi></mrow></mfrac>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 h 为天线相对地面的挂高（m），θ 为主波束指向地面的俯角（°）。挂高越高或下倾角越小，覆盖越远——这与上表“站高越高覆盖越远”的结论一致。反过来，运维时想压掉越区覆盖，只需加大下倾角，这正是现场最常用的手段。</p>
+
+        <div class="tip" role="group" aria-labelledby="dw-label">
+            <p id="dw-label"><strong>算一算：</strong>取城区典型挂高 h=40 m，选一个下倾角，估算主波束落地距离：</p>
+            <p>
+                <button type="button" class="dw-btn" data-tilt="3">下倾角 3°</button>
+                <button type="button" class="dw-btn" data-tilt="6">下倾角 6°</button>
+                <button type="button" class="dw-btn" data-tilt="9">下倾角 9°</button>
+                <button type="button" class="dw-btn" data-tilt="12">下倾角 12°</button>
+            </p>
+            <output id="dw-out" aria-live="polite">请选择一个下倾角</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按 D=h/tanθ 的几何简化估算，未计入垂直波束宽度、机械/电子下倾差异与地形遮挡；真实小区边界由覆盖仿真确定。</p>
+        </div>
+
         <h3>选址避让原则</h3>
         <p>基站不能随意选址。以下是一些必须避让的场景：</p>
         <ul>
@@ -306,5 +332,23 @@ SZ-Nanshan-5G-001_AAU1天线端口1</code></pre>
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('dw-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.dw-btn'));
+    if (!out || !btns.length) return;
+    var h = 40; /* 城区典型挂高 40 m */
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var tilt = parseFloat(b.getAttribute('data-tilt'));
+            var d = h / Math.tan(tilt * Math.PI / 180);
+            out.textContent = '下倾角 ' + tilt + '°（h=40 m）：主波束落地距离 \u2248 ' +
+                Math.round(d) + ' m（' + (d / 1000).toFixed(2) + ' km）';
+        });
+    });
+})();
+</script>
 </body>
 </html>
