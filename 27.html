@@ -107,7 +107,33 @@ doppler_profile = fft(H, N_symbols, 2);
 estimated_range = peak_range * (3e8 / (N_subcarriers * delta_f));
 estimated_velocity = peak_doppler * (3e8 / (2 * fs));</code></pre>
 
-        <p>这个伪代码展示了ISAC最核心的数学原理——本质上，通信和感知共享了OFDM物理层的信号处理链。通信接收机在做信道估计时，估计的就是信道的时延-多普勒响应，而这恰好就是雷达感知所需要的"距离-速度二维图"。这就是ISAC能够"一鸡多吃"的根本原因。</p>
+        <p>这个伪代码展示了ISAC最核心的数学原理--本质上,通信和感知共享了OFDM物理层的信号处理链。通信接收机在做信道估计时,估计的就是信道的时延-多普勒响应,而这恰好就是雷达感知所需要的"距离-速度二维图"。这就是ISAC能够“一鸡多吃”的根本原因。</p>
+
+        <h3>距离分辨率：带宽决定“看得多清”</h3>
+
+        <p>感知精度不是靠算力堆出来的，而是由波形带宽决定的。雷达的距离分辨率——能区分开两个相邻目标的最小间距——只取决于信号带宽：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="ISAC 距离分辨率公式，可横向滚动">
+                <math display="block" aria-label="距离分辨率 Delta R 等于光速 c 除以两倍带宽 B">
+                    <mi>&#916;</mi><mi>R</mi><mo>=</mo><mfrac><mi>c</mi><mrow><mn>2</mn><mi>B</mi></mrow></mfrac>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 c 为光速（约 3×10⁸ m/s），B 为信号带宽（Hz）。上面伪代码里 1024 个子载波 × 30 kHz 间隔 = 30.72 MHz 带宽，代入得 ΔR ≈ 4.9 m——这正是 ISAC 要往大带宽乃至太赫兹发展的原因：带宽越宽，能分辨的目标越密集。选一个带宽看看分辨率如何变化：</p>
+
+        <div class="tip" role="group" aria-labelledby="isac-label">
+            <p id="isac-label"><strong>算一算：</strong>选一个信号带宽，估算距离分辨率 ΔR=c/(2B)：</p>
+            <p>
+                <button type="button" class="isac-btn" data-b="0.1">带宽 100 MHz</button>
+                <button type="button" class="isac-btn" data-b="0.4">带宽 400 MHz</button>
+                <button type="button" class="isac-btn" data-b="1">带宽 1 GHz</button>
+                <button type="button" class="isac-btn" data-b="2">带宽 2 GHz</button>
+            </p>
+            <output id="isac-out" aria-live="polite">请选择一个带宽</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按理想无噪条件下 ΔR=c/(2B) 估算分辨率，未计入信噪比、积累增益、天线孔径与波形自相关旁瓣对实际分辨能力的限制。</p>
+        </div>
 
         <h3>ISAC的典型应用</h3>
 
@@ -329,5 +355,23 @@ estimated_velocity = peak_doppler * (3e8 / (2 * fs));</code></pre>
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('isac-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.isac-btn'));
+    if (!out || !btns.length) return;
+    var c = 3e8; /* m/s */
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var bGHz = parseFloat(b.getAttribute('data-b')); /* GHz */
+            var dr = c / (2 * bGHz * 1e9); /* m */
+            var txt = dr >= 1 ? dr.toFixed(2) + ' m' : (dr * 100).toFixed(1) + ' cm';
+            out.textContent = '带宽 ' + (bGHz * 1000) + ' MHz：距离分辨率 \u0394R \u2248 ' + txt;
+        });
+    });
+})();
+</script>
 </body>
 </html>
