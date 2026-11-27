@@ -185,6 +185,34 @@ SD:   24 bits, 运营商自定义, 用于区分同一类型下的不同切片实
 
         <p>RAN侧切片的最小粒度是DRB（Data Radio Bearer），每个DRB关联一个5QI值，而5QI值又可以映射到特定的S-NSSAI。通过这种方式，gNB知道每个数据包属于哪个切片，从而执行对应的调度策略。</p>
 
+        <h3>PRB 预留换来的保障带宽</h3>
+
+        <p>PRB 预留听起来抽象，换算成带宽却很直观：预留的物理资源块占总量的比例，乘以载波总带宽，就是该切片在无线侧能拿到的保障带宽：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="切片保障带宽公式，可横向滚动">
+                <math display="block" aria-label="切片保障带宽 B_slice 等于预留 PRB 数 N_slice 除以总 PRB 数 N_total 再乘以载波带宽 B_carrier">
+                    <msub><mi>B</mi><mi>slice</mi></msub><mo>=</mo>
+                    <mfrac><msub><mi>N</mi><mi>slice</mi></msub><msub><mi>N</mi><mi>total</mi></msub></mfrac>
+                    <mo>&#215;</mo><msub><mi>B</mi><mi>carrier</mi></msub>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 N_slice 为预留给该切片的 PRB 数，N_total 为载波内 PRB 总数，B_carrier 为载波带宽。以 100 MHz NR 载波（30 kHz 子载波间隔）为例，一个载波共 273 个 PRB（3GPP TS 38.104）。预留比例越高，URLLC 切片在拥塞时越有底气：</p>
+
+        <div class="tip" role="group" aria-labelledby="prb-label">
+            <p id="prb-label"><strong>算一算：</strong>100 MHz 载波（273 PRB），选一个预留量，估算切片保障带宽：</p>
+            <p>
+                <button type="button" class="prb-btn" data-n="27">预留 27 PRB</button>
+                <button type="button" class="prb-btn" data-n="55">预留 55 PRB</button>
+                <button type="button" class="prb-btn" data-n="82">预留 82 PRB</button>
+                <button type="button" class="prb-btn" data-n="137">预留 137 PRB</button>
+            </p>
+            <output id="prb-out" aria-live="polite">请选择一个预留量</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按名义带宽 100 MHz 做等比例换算，未计入保护带、信令/参考信号开销以及调度器实际可用的频谱效率。</p>
+        </div>
+
         <h3>传输网切片实现</h3>
 
         <p>在承载网侧，有两种主流的切片隔离方案：</p>
@@ -292,5 +320,23 @@ slice:
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('prb-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.prb-btn'));
+    if (!out || !btns.length) return;
+    var TOTAL = 273, B = 100; /* 100 MHz / 273 PRB */
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var n = parseFloat(b.getAttribute('data-n'));
+            var bw = n / TOTAL * B;
+            out.textContent = '预留 ' + n + ' / ' + TOTAL + ' PRB：保障带宽 \u2248 ' +
+                bw.toFixed(1) + ' MHz（占载波 ' + (n / TOTAL * 100).toFixed(1) + '%）';
+        });
+    });
+})();
+</script>
 </body>
 </html>
