@@ -229,7 +229,7 @@ rxBits = nrPDSCHDecode(carrier, pdsch, rxSymbols, ...
 ber = sum(decBits ~= trBlk) / length(trBlk);
 disp(['BER @ ' num2str(SNRdB) ' dB SNR: ' num2str(ber, '%.2e')]);</code></pre>
 
-        <p>整个链路仿真的核心逻辑可以用一句话概括:<strong>你不知道信道里发生了什么,所以必须用冗余编码和信道估计来"猜"回去</strong>。而仿真的意义就在于——你能在完全受控的条件下反复测试这个“猜”的成功率，并针对性地优化系统参数。</p>
+        <p>整个链路仿真的核心逻辑可以用一句话概括：<strong>你不知道信道里发生了什么，所以必须用冗余编码和信道估计来"猜"回去</strong>。而仿真的意义就在于——你能在完全受控的条件下反复测试这个"猜"的成功率，并针对性地优化系统参数。</p>
 
         <h3>理论基线：QPSK 在 AWGN 下的误码率</h3>
 
