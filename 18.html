@@ -103,6 +103,41 @@
             <li><strong>效果验证</strong>：调整后进行复测，确认指标改善。如果未达到目标，回到步骤2继续迭代。</li>
         </ol>
 
+        <p>这些 KPI 看着名目繁多，但本质上都是“成功次数 ÷ 尝试次数”的比值。以最常用的两个为例：</p>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="接通率定义式，可横向滚动">
+                <math display="block" aria-label="无线接通率等于成功次数除以请求次数乘以百分之百">
+                    <mtext>接通率</mtext><mo>=</mo>
+                    <mfrac><msub><mi>N</mi><mtext>成功</mtext></msub><msub><mi>N</mi><mtext>请求</mtext></msub></mfrac>
+                    <mo>&#215;</mo><mn>100</mn><mo>%</mo>
+                </math>
+            </div>
+        </div>
+
+        <div class="math-equation">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="掉线率定义式，可横向滚动">
+                <math display="block" aria-label="掉线率等于异常释放次数除以成功建立次数乘以百分之百">
+                    <mtext>掉线率</mtext><mo>=</mo>
+                    <mfrac><msub><mi>N</mi><mtext>异常释放</mtext></msub><msub><mi>N</mi><mtext>成功建立</mtext></msub></mfrac>
+                    <mo>&#215;</mo><mn>100</mn><mo>%</mo>
+                </math>
+            </div>
+        </div>
+
+        <p>分母不同是初学者最容易搞错的地方：接通率的分母是“请求”，掉线率的分母是“成功建立”。选一组样本量算一下接通率：</p>
+
+        <div class="tip" role="group" aria-labelledby="kpi-label">
+            <p id="kpi-label"><strong>算一算：</strong>选择（成功 / 请求）次数，估算无线接通率：</p>
+            <p class="kpi-btns">
+                <button type="button" class="kpi-btn" data-succ="9980" data-req="10000">9980 / 10000</button>
+                <button type="button" class="kpi-btn" data-succ="9950" data-req="10000">9950 / 10000</button>
+                <button type="button" class="kpi-btn" data-succ="9900" data-req="10000">9900 / 10000</button>
+            </p>
+            <output id="kpi-out" aria-live="polite">请选择一组样本次数</output>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:6px;">教学示意：按上式直接计算，拉网测试常以 99.5% 作为一个常见标杆值（具体验收门限以运营商规范为准）；实际 KPI 还要区分不同触发原因与失败阶段。</p>
+        </div>
+
         <h2>18.2 DT路测与CQT定点测试</h2>
 
         <p>路测（Drive Test, DT）是网优最"接地气"的工作——把测试设备装到车上，在目标区域开车测试，记录沿途的无线信号质量。CQT（Call Quality Test, 定点测试）则是在特定点位进行固定位置的测试。</p>
@@ -295,5 +330,23 @@ Thresh2 (邻区):   -105 dBm  /* 邻区信号高于此门限 */
     </article></main>
 </div>
 </div>
+<script>
+(function () {
+    var out = document.getElementById('kpi-out');
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.kpi-btn'));
+    if (!out || !btns.length) return;
+    btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+            var succ = parseFloat(b.getAttribute('data-succ'));
+            var req = parseFloat(b.getAttribute('data-req'));
+            var rate = (succ / req) * 100;
+            out.textContent = '成功 ' + succ + ' / 请求 ' + req + '：接通率 = ' + rate.toFixed(2) +
+                '%' + (rate >= 99.5 ? '（不低于 99.5% 常见标杆）' : '（低于 99.5% 常见标杆）');
+        });
+    });
+})();
+</script>
 </body>
 </html>
